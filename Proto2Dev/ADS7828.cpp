@@ -8,7 +8,7 @@
  *  
  *  @file ADS7828.cpp
  *  @date 23 may 2014
- *  @copyright PAWN International
+ *  @copyright PAWM International
  *  
  *  @author Mickael Germain
  *  
