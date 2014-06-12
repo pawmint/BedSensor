@@ -15,28 +15,28 @@
  */
  
 #ifndef ADS7828_H
- #define ADS7828_H
+# define ADS7828_H
  
- #if defined(ARDUINO) && ARDUINO >= 100
-  #include "Arduino.h"
- #else
-  #include "WProgram.h"
- #endif
+# if defined(ARDUINO) && ARDUINO >= 100
+#  include "Arduino.h"
+# else
+#  include "WProgram.h"
+# endif
  
- #include "Wire.h"
- #include <assert.h>
- #include <inttypes.h>
+# include "Wire.h"
+# include <assert.h>
+# include <inttypes.h>
  
- #define TWI_SUCCESS                0
- #define TWI_DATA_TOO_LONG          1
- #define TWI_NACK_ON_ADDRESS        2
- #define TWI_NACK_ON_DATA           3
- #define TWI_OTHER_ERROR            4
+# define TWI_SUCCESS                0
+# define TWI_DATA_TOO_LONG          1
+# define TWI_NACK_ON_ADDRESS        2
+# define TWI_NACK_ON_DATA           3
+# define TWI_OTHER_ERROR            4
  
  /**
   * Factory pre-set I2C Slace address.
   */
- #define ADS7828_HARDWARE_ADDRESS    0b10010
+# define ADS7828_HARDWARE_ADDRESS    0b10010
  
  /**
   * Use differential inputs.
@@ -45,7 +45,7 @@
   * @see ADS7828_configAndGet()
   * @see ADS7828_getAllValues()
   */
- #define ADS7828_DIFFERENTIAL_I     0b00000000
+# define ADS7828_DIFFERENTIAL_I     0b00000000
  
  /**
   * Use single ended inputs.
@@ -54,12 +54,12 @@
   * @see ADS7828_configAndGet()
   * @see ADS7828_getAllValues()
   */
- #define ADS7828_SINGLE_ENDED_I     0b10000000
+# define ADS7828_SINGLE_ENDED_I     0b10000000
  
  /**
   * Don't use the internal reference to perform convertion.
   */
- #define ADS7828_INTERNAL_REF_OFF   0b00000000
+# define ADS7828_INTERNAL_REF_OFF   0b00000000
  
  /**
   * Use the internal reference to perform convertion.
@@ -74,7 +74,7 @@
   * @see ADS7828_configAndGet()
   * @see ADS7828_getAllValues()
   */
- #define ADS7828_INTERNAL_REF_ON    0b00001000
+# define ADS7828_INTERNAL_REF_ON    0b00001000
  
  /**
   * Turn off A/D converter.
@@ -83,7 +83,7 @@
   * @see ADS7828_configAndGet()
   * @see ADS7828_getAllValues()
   */
- #define ADS7828_AD_CONVERTER_OFF   0b00000000
+# define ADS7828_AD_CONVERTER_OFF   0b00000000
  
  /**
   * Turn on A/D converter.
@@ -92,7 +92,7 @@
   * @see ADS7828_configAndGet()
   * @see ADS7828_getAllValues()
   */
- #define ADS7828_AD_CONVERTER_ON    0b00000100
+# define ADS7828_AD_CONVERTER_ON    0b00000100
  
  /**
   * Number of available analog channel on ADS7828.
@@ -101,12 +101,12 @@
   * @see ADS7828_configAndGet()
   * @see ADS7828_getAllValues()
   */
- #define ADS7828_NB_CHANNEL         8
+# define ADS7828_NB_CHANNEL         8
  
  /**
   * Resolution of the A/D converter in bit.
   */
- #define ADS7828_RESOLUTION         4096
+# define ADS7828_RESOLUTION         4096
  
  /**
   * Prepares arduino for communication with ADS7828.
@@ -114,7 +114,7 @@
   * @warning If arduino act as a I2C slave the communication will be broken.
   * @pre I2C pin need to be free.
   */
- #define ADS7828_init() Wire.begin()
+# define ADS7828_init() Wire.begin()
  
  /**
   * Power down the ADS7828.
@@ -124,12 +124,12 @@
   * 
   * @note To further information refer to ADS7828_config() .
   */
- #define ADS7828_powerDown(addr) ADS7828_config(addr, ADS7828_INTERNAL_REF_OFF | ADS7828_AD_CONVERTER_OFF, 0, true)
+# define ADS7828_powerDown(addr) ADS7828_config(addr, ADS7828_INTERNAL_REF_OFF | ADS7828_AD_CONVERTER_OFF, 0, true)
  
  /**
   * Wait during internal reference's turn on time.
   */
- #define ADS7828_waitInternalRefTurnOn() delayMicroseconds(1240)
+# define ADS7828_waitInternalRefTurnOn() delayMicroseconds(1240)
  
  /**
   * Enters in high speed mode (3.4 MHz).

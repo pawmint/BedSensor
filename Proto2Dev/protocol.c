@@ -77,6 +77,98 @@ eProtocolTrame protocol_trameIdentification(char const buffer[PROTOCOL_TRAME_TYP
     return iterTrame;
 }
 
+bool protocol_parseYOP(uint8_t* fsrNumber, uint8_t* fscNumber)
+{
+	bool bOk;
+	char buf[3];
+	
+	assert(fsrNumber != NULL);
+	assert(fscNumber != NULL);
+	
+	buf[2] = '\0';
+	
+	if (bOk = protocol_isSeparator())
+	{
+		
+		buf[0] = protocol_readChar();
+		buf[1] = protocol_readChar();
+		
+		*fsrNumber = atoi(buf);
+		bOk = (*fsrNumber != 0);
+	}
+	if (bOk = (bOk && protocol_isSeparator()))
+	{
+		buf[0] = protocol_readChar();
+		buf[1] = protocol_readChar();
+				
+		*fscNumber = atoi(buf);
+		bOk = (*fscNumber != 0);
+	}
+	
+	return bOk && protocol_isEndOfTrame();
+}
+
+uint16_t protocol_createYOP(uint8_t buffer[PROTOCOL_YOP_SIZE])
+{
+	/* $YOP,<FSR>,<FSC>\n */
+	uint16_t pos;
+	
+	assert(buffer != 0);
+	assert(PROTOCOL_FSR_NUMBER < 100);
+	assert(PROTOCOL_FSR_NUMBER < 100);
+	
+	pos = 0;
+	
+	buffer[pos] = PROTOCOL_TRAME_START;
+	pos += PROTOCOL_TRAME_START_SIZE;
+
+	memcpy(buffer + pos, protocol_trameId[cProtocolTrameYOP], PROTOCOL_TRAME_TYPE_SIZE);
+	pos += PROTOCOL_TRAME_TYPE_SIZE;
+
+	buffer[pos] = PROTOCOL_TRAME_SEP;
+	pos += PROTOCOL_TRAME_SEP_SIZE;
+
+	buffer[pos++] = PROTOCOL_FSR_NUMBER / 10 + '0';
+	buffer[pos++] = PROTOCOL_FSR_NUMBER % 10 + '0';
+	
+	buffer[pos] = PROTOCOL_TRAME_SEP;
+	pos += PROTOCOL_TRAME_SEP_SIZE;
+	
+	buffer[pos++] = PROTOCOL_FSC_NUMBER / 10 + '0';
+	buffer[pos++] = PROTOCOL_FSC_NUMBER % 10 + '0';
+	
+	buffer[pos] = PROTOCOL_TRAME_END;
+	pos += PROTOCOL_TRAME_END_SIZE;
+
+	assert(pos == PROTOCOL_YOP_SIZE);
+
+	return pos;
+	
+}
+
+uint16_t protocol_createACK(uint8_t buffer[PROTOCOL_ACK_SIZE])
+{
+	uint16_t pos;
+
+	assert(buffer != NULL);
+
+	pos = 0;
+
+	buffer[pos] = PROTOCOL_TRAME_START;
+	pos += PROTOCOL_TRAME_START_SIZE;
+
+	memcpy(buffer + pos, protocol_trameId[cProtocolTrameACK], PROTOCOL_TRAME_TYPE_SIZE);
+	pos += PROTOCOL_TRAME_TYPE_SIZE;
+
+	buffer[pos] = PROTOCOL_TRAME_END;
+	pos += PROTOCOL_TRAME_END_SIZE;
+
+	assert(pos == PROTOCOL_ACK_SIZE);
+
+	return pos;
+
+}
+
 bool protocol_parseSYN(uint32_t* timeData)
 {
     assert(timeData != NULL);
@@ -157,22 +249,6 @@ uint16_t protocol_createERR(const eProtocolError errNum, uint8_t buffer[PROTOCOL
     assert(pos == PROTOCOL_ERR_SIZE);
 
     return pos;
-}
-
-/** 
- *  @todo
- */
-/*bool protocol_parseYOP(void)
-{
-    return true;
-}*/
-
-/** 
- *  @todo
- */
-uint16_t protocol_createYOP(void)
-{
-    return 0;
 }
 
 /** 
