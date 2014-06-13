@@ -221,7 +221,7 @@
  /**
   *	Enumeration of all frame's type.
   * 
-  * @see protocol_FrameIdentification()
+  * @see protocol_frameIdentification()
   */
  typedef enum
  {
@@ -240,7 +240,7 @@
     /*--------END OF ENUMERATION--------*/
     cProtocolFrameNumber,   /**< Number of frame's type. */
     cProtocolFrameUnknow    /**< Value for an unknown type of frame. */
- } iterFrameeProtocolFrame;
+ } eProtocolFrame;
  
  /**
   *	Enumeration of bed sensor's runtime mode.
@@ -364,7 +364,7 @@
   * 
   * @see cProtocolFrame
   */
- extern char const protocol_FrameId[cProtocolFrameNumber][PROTOCOL_FRAME_TYPE_SIZE + 1];
+ extern char const protocol_frameId[cProtocolFrameNumber][PROTOCOL_FRAME_TYPE_SIZE + 1];
 /**
  *	Reference of the function for reading communication stream.
  *  
@@ -389,7 +389,7 @@
   *	
   *	@return The corresponding value of the identified frame hopefully, cProtocolFrameUnknow otherwise.
   */
-  iterFrameeProtocolFrame protocol_FrameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE]);
+  eProtocolFrame protocol_frameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE]);
  
  //////////////////////////////////////////////////////////////////////////
  // Frame Parsing
