@@ -31,9 +31,7 @@ bool getFSCSensor(uint16_t* values)
 {
 	uint16_t i;
 	for (i = 0 ; i < PROTOCOL_FSC_NUMBER ; i++)
-	{
 		values[i] = random() / RAND_MAX * 2048;
-	}
 
 	return true;
 }
@@ -48,14 +46,19 @@ char (*protocol_readChar)(void) = &monRead;
 
 
 uint8_t buffer[BUFFER_SIZE];
-uint16_t bufferPos;
+uint8_t ackBuf[PROTOCOL_ACK_SIZE];
+uint16_t bufferPos = 0;
 uint16_t old;
 
 void setup()
 {
 	Serial.begin(9600);
 	ADS7828_init();
+	protocol_createACK(ackBuf);
 	Serial.println("start");
+	bufferPos += protocol_createYOP(buffer + bufferPos);
+	sendData(buffer, bufferPos);
+	bufferPos = 0;
 }
 
 void loop()
@@ -73,9 +76,7 @@ void loop()
 		delay(1000);
 	}
 	else
-	{
-		Serial.println("$ACK");
-	}
+		sendData(ackBuf, PROTOCOL_ACK_SIZE);
 }
 
 bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint32_t fscDelay, uint8_t buffer[BUFFER_SIZE], uint16_t* bufferPos)
@@ -97,9 +98,7 @@ bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint
 	if (!bStarted)
 	{
 		if (*bufferPos + PROTOCOL_DR1_SIZE + PROTOCOL_DC1_SIZE > BUFFER_SIZE)
-		{
 			bFull = true;
-		}
 		else
 		{
 			sDr1.time = sDc1.time = millisSave = millis();
@@ -129,7 +128,7 @@ bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint
 					bDcnInit = false;
 				}
 				if (*bufferPos + PROTOCOL_DR1_SIZE > BUFFER_SIZE)
-				bFull = true;
+					bFull = true;
 				else
 				{
 					sDr1.time = millis();
@@ -144,7 +143,7 @@ bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint
 				{
 					// if (!(bFull = (*bufferPos + PROTOCOL_DCN_MIN_SIZE > BUFFER_SIZE)))
 					if (*bufferPos + PROTOCOL_DCN_MIN_SIZE > BUFFER_SIZE)
-					bFull = true;
+						bFull = true;
 					else
 					{
 						sDc1.time = millis();
@@ -165,18 +164,16 @@ bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint
 				}
 				// fscTimeout += !bFull * fscDelay;
 				if (!bFull)
-				fscTimeout += fscDelay;
+					fscTimeout += fscDelay;
 				
 			}
 			if (!bFull)
 			{
 				millisSave = millis();
 				if (millisSave > globalTimeout)
-				bStop = true;
+					bStop = true;
 				else if ((millisSave < fscTimeout) && (millisSave < fsrTimeout))
-				{
 					bStop = mysleep(((fscTimeout < fsrTimeout) ? fscTimeout : fsrTimeout) - millisSave, globalTimeout);
-				}
 			}
 		} while (!bFull && !bStop);
 		if (bDcnInit)
