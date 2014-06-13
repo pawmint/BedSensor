@@ -1,3 +1,14 @@
+/**
+ *	A simple implementation of arpa/inet functions.
+ *	
+ *  @file endian.c
+ *  @date 13 juin 2014
+ *  @copyright PAWM International
+ *	
+ *  @author Mickael Germain
+ *	
+ */
+
 #include "endian.h"
 
 void* endian_copyToB16(void* dest, const void* src, const size_t n)

@@ -1,17 +1,96 @@
+/**
+ *  Bed sensor's communication protocol.
+ *    
+ *  Provide functions and structures in order 
+ *  to creates and manages communication's 
+ *  frames between sensor and platform.
+ *	
+ *  @file protocol.c
+ *  @date 13 juin 2014
+ *  @copyright PAWM International
+ *	
+ *  @author Mickael Germain
+ *	
+ */
+
 #include "protocol.h"
 
+/**
+ *	Read an integer of 1 byte from set stream.
+ *  
+ *  @internal
+ *  
+ *  @return The integer read.
+ *
+ *  @see protocol_read16()
+ *  @see protocol_read32()
+ */
 #define protocol_read8() protocol_readChar()
 
+/**
+ *	Read an integer of 2 bytes from set stream.
+ *  
+ *  @internal
+ *  
+ *  @note The integer should be in big endian format and 
+ *        will be convert to the host format.
+ *  
+ *  @return The integer read.
+ *  
+ *  @see protocol_read8()
+ *  @see protocol_read32()
+ */
 static uint16_t protocol_read16(void);
+
+/**
+ *	Read an integer of 4 bytes from set stream.
+ *  
+ *  @internal
+ *
+ *  @note The integer should be in big endian format and
+ *        will be convert to the host format.
+ *  
+ *  @return The integer read.
+ *  
+ *  @see protocol_read8()
+ *  @see protocol_read16()
+ */
 static uint32_t protocol_read32(void);
 
+/**
+ *	Read FSC's values from set stream.
+ *  
+ *  @internal
+ *  
+ *  @param [out] fscValues
+ *      Reference where store values.
+ */
 static void protocol_readFSC(uint16_t* fscValues);
+
+/**
+ *	Read FSR's values from set stream.
+ *  
+ *  @internal
+ *  
+ *  @param [out] fsrValues
+ *      Reference where store values.
+ */
 static void protocol_readFSR(uint16_t* fsrValues);
 
-char const protocol_trameId[cProtocolTrameNumber][PROTOCOL_TRAME_TYPE_SIZE + 1] = {"ACK", "YOP", "SYN",
-                                                                                   "ERR", "BAT", "MOD",
-                                                                                   "DR1", "DC1", "DCN",
-                                                                                   "DA1", "DAN"};
+char const protocol_trameId[cProtocolTrameNumber][PROTOCOL_TRAME_TYPE_SIZE + 1] = {"ACK", 
+                                                                                   "YOP", 
+                                                                                   "SYN",
+                                                                                   "ERR", 
+                                                                                   "BAT", 
+                                                                                   "MOD",
+                                                                                   "DR1", 
+                                                                                   "DC1", 
+                                                                                   "DCN",
+                                                                                   "DA1", 
+                                                                                   "DAN"
+                                                                                   /* ^-insert new frames id at the end-^ */
+                                                                                   /* According to eProtocolFrame order.  */
+                                                                                   };
 
 static uint16_t protocol_read16(void)
 {
@@ -19,7 +98,7 @@ static uint16_t protocol_read16(void)
 
     value  = protocol_read8() << 8;
     value += protocol_read8();
-
+    
     return endian_ntohs(value);
 }
 
@@ -42,9 +121,7 @@ static void protocol_readFSC(uint16_t* fscValues)
     assert(fscValues != NULL);
 
     for (iterFsc = 0 ; iterFsc < PROTOCOL_FSC_NUMBER ; iterFsc++)
-    {
         fscValues[iterFsc] = protocol_read16();
-    }
 }
 
 static void protocol_readFSR(uint16_t* fsrValues)
@@ -54,9 +131,7 @@ static void protocol_readFSR(uint16_t* fsrValues)
     assert(fsrValues != NULL);
 
     for (iterFsr = 0 ; iterFsr < PROTOCOL_FSR_NUMBER ; iterFsr++)
-    {
         fsrValues[iterFsr] = protocol_read16();
-    }
 }
 
 eProtocolTrame protocol_trameIdentification(char const buffer[PROTOCOL_TRAME_TYPE_SIZE])
@@ -65,14 +140,12 @@ eProtocolTrame protocol_trameIdentification(char const buffer[PROTOCOL_TRAME_TYP
 
     eProtocolTrame iterTrame = 0;
     while (iterTrame < cProtocolTrameNumber && strncmp(buffer, protocol_trameId[iterTrame], PROTOCOL_TRAME_TYPE_SIZE) != 0)
-    {
         iterTrame++;
-    }
+        
     assert(iterTrame <= cProtocolTrameNumber);
+    
     if (iterTrame == cProtocolTrameNumber)
-    {
         iterTrame = cProtocolTrameUnknow;
-    }
 
     return iterTrame;
 }
@@ -89,7 +162,7 @@ bool protocol_parseYOP(uint8_t* fsrNumber, uint8_t* fscNumber)
 	
 	if (bOk = protocol_isSeparator())
 	{
-		
+		/* [00;99] */
 		buf[0] = protocol_readChar();
 		buf[1] = protocol_readChar();
 		
@@ -98,6 +171,7 @@ bool protocol_parseYOP(uint8_t* fsrNumber, uint8_t* fscNumber)
 	}
 	if (bOk = (bOk && protocol_isSeparator()))
 	{
+        /* [00;99] */
 		buf[0] = protocol_readChar();
 		buf[1] = protocol_readChar();
 				
@@ -108,14 +182,14 @@ bool protocol_parseYOP(uint8_t* fsrNumber, uint8_t* fscNumber)
 	return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createYOP(uint8_t buffer[PROTOCOL_YOP_SIZE])
+uint16_t protocol_createYOP(tProtocol_bufferYOP buffer)
 {
 	/* $YOP,<FSR>,<FSC>\n */
 	uint16_t pos;
 	
 	assert(buffer != 0);
-	assert(PROTOCOL_FSR_NUMBER < 100);
-	assert(PROTOCOL_FSR_NUMBER < 100);
+	assert(PROTOCOL_FSR_NUMBER <= 99);
+	assert(PROTOCOL_FSR_NUMBER <= 99);
 	
 	pos = 0;
 	
@@ -146,7 +220,7 @@ uint16_t protocol_createYOP(uint8_t buffer[PROTOCOL_YOP_SIZE])
 	
 }
 
-uint16_t protocol_createACK(uint8_t buffer[PROTOCOL_ACK_SIZE])
+uint16_t protocol_createACK(tProtocol_bufferACK buffer)
 {
 	uint16_t pos;
 
@@ -178,7 +252,7 @@ bool protocol_parseSYN(uint32_t* timeData)
     return protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createSYN(const uint32_t timeData, uint8_t buffer[PROTOCOL_SYN_SIZE])
+uint16_t protocol_createSYN(const uint32_t timeData, tProtocol_bufferSYN buffer)
 {
     /* $SYN,<TIME>\n */
     uint16_t pos;
@@ -221,7 +295,7 @@ bool protocol_parseERR(eProtocolError* errNum)
     return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createERR(const eProtocolError errNum, uint8_t buffer[PROTOCOL_ERR_SIZE])
+uint16_t protocol_createERR(const eProtocolError errNum, tProtocol_bufferERR buffer)
 {
     /* $ERR,<NUM>\n */
     uint16_t pos;
@@ -280,7 +354,7 @@ bool protocol_parseMOD(eProtocolMode* modeNum)
     return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createMOD(const eProtocolMode modeNum, uint8_t buffer[PROTOCOL_MOD_SIZE])
+uint16_t protocol_createMOD(const eProtocolMode modeNum, tProtocol_bufferMOD buffer)
 {
     /* $MOD,<NUM>\n */
     uint16_t pos;
@@ -327,7 +401,7 @@ bool protocol_parseDR1(struct sProtocolDR1* sDr1)
     return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createDR1(struct sProtocolDR1 const* sDr1, uint8_t buffer[PROTOCOL_DR1_SIZE])
+uint16_t protocol_createDR1(struct sProtocolDR1 const* sDr1, tProtocol_bufferDR1 buffer)
 {
     /* $DR1,<TIME>,<R0><R1>...<RN>\n */
     uint16_t pos;
@@ -381,7 +455,7 @@ bool protocol_parseDC1(struct sProtocolDC1* sDc1)
     return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createDC1(struct sProtocolDC1 const* sDc1, uint8_t buffer[PROTOCOL_DC1_SIZE])
+uint16_t protocol_createDC1(struct sProtocolDC1 const* sDc1, tProtocol_bufferDC1 buffer)
 {
     /* $DC1,<TIME>,<C0><C1>...<CN>\n */
     uint16_t pos;
@@ -436,24 +510,31 @@ bool protocol_parseDCN(struct sProtocolDCN* sDcn)
             nbSamples = 0;
             do
             {
+                /* At least one wave of sampling. */
                 protocol_readFSC(sDcn->fscValues[nbSamples]);
                 buf = protocol_readChar();
                 bOk = (buf == PROTOCOL_TRAME_SEP || buf == PROTOCOL_TRAME_END);
+            /* if there is a separator then parse an other wave. */
             } while (   bOk &&
                         buf == PROTOCOL_TRAME_SEP &&
-                        ++nbSamples < PROTOCOL_DCN_SAMPLE_MAX);
-            sDcn->nbSamples = nbSamples;
+                        ++nbSamples <= PROTOCOL_DCN_SAMPLE_MAX);
+            /* Too much waves ? */
+            if (nbSamples > PROTOCOL_DCN_SAMPLE_MAX)
+                bOk = false;
+            else
+                sDcn->nbSamples = nbSamples;
         }
     }
 
     return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, uint8_t buffer[PROTOCOL_DATA_SIZE_MAX])
+uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, tProtocol_bufferDCN buffer)
 {
     /* $DCN,<TIME>,<DELTA>,<C0><C1>...<CN>[,<C0><C1>...<CN>]\n */
     uint16_t pos;
     uint16_t iterSamples;
+    
     assert(sDcn != NULL);
     assert(buffer != NULL);
     assert(sDcn->nbSamples <= PROTOCOL_DCN_SAMPLE_MAX);
@@ -580,7 +661,7 @@ bool protocol_parseDA1(struct sProtocolDA1* sDa1)
     return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createDA1(struct sProtocolDA1 const* sDa1, uint8_t buffer[PROTOCOL_DA1_SIZE])
+uint16_t protocol_createDA1(struct sProtocolDA1 const* sDa1, tProtocol_bufferDA1 buffer)
 {
     /* $DA1,<TIME>,<R0><R1>...<RN>,<C0><C1>....<CN>\n */
     uint16_t pos;
@@ -641,6 +722,7 @@ bool protocol_parseDAN(struct sProtocolDAN* sDan)
             nbSamples = 0;
             do
             {
+                /* At least one wave of sampling. */
                 protocol_readFSR(sDan->fsrValues[nbSamples]);
                 bOk = protocol_isSeparator();
                 if (bOk)
@@ -649,18 +731,23 @@ bool protocol_parseDAN(struct sProtocolDAN* sDan)
                     buf = protocol_readChar();
                     bOk = (buf == PROTOCOL_TRAME_SEP || buf == PROTOCOL_TRAME_END);
                 }
+            /* if there is a separator then parse an other wave. */
             } while (   bOk &&
                         buf == PROTOCOL_TRAME_SEP &&
                         ++nbSamples < PROTOCOL_DAN_SAMPLE_MAX
                     );
-            sDan->nbSamples = nbSamples;
+            /* Too much waves ? */
+            if (nbSamples > PROTOCOL_DCN_SAMPLE_MAX)
+                bOk = false;
+            else
+                sDcn->nbSamples = nbSamples;
         }
     }
 
     return bOk && protocol_isEndOfTrame();
 }
 
-uint16_t protocol_createDAN(struct sProtocolDAN const* sDan, uint8_t buffer[PROTOCOL_DATA_SIZE_MAX])
+uint16_t protocol_createDAN(struct sProtocolDAN const* sDan, tProtocol_bufferDAN buffer)
 {
     /* $DCN,<TIME>,<DELTA>,<C0><C1>...<CN>[,<C0><C1>...<CN>]\n */
     uint16_t pos;
