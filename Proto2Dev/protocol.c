@@ -77,7 +77,7 @@ static void protocol_readFSC(uint16_t* fscValues);
  */
 static void protocol_readFSR(uint16_t* fsrValues);
 
-char const protocol_FrameId[cProtocolFrameNumber][PROTOCOL_FRAME_TYPE_SIZE + 1] = {"ACK", 
+char const protocol_frameId[cProtocolFrameNumber][PROTOCOL_FRAME_TYPE_SIZE + 1] = {"ACK", 
                                                                                    "YOP", 
                                                                                    "SYN",
                                                                                    "ERR", 
@@ -134,12 +134,12 @@ static void protocol_readFSR(uint16_t* fsrValues)
         fsrValues[iterFsr] = protocol_read16();
 }
 
-eProtocolFrame protocol_FrameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE])
+eProtocolFrame protocol_frameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE])
 {
     assert(buffer != NULL);
 
     eProtocolFrame iterFrame = 0;
-    while (iterFrame < cProtocolFrameNumber && strncmp(buffer, protocol_FrameId[iterFrame], PROTOCOL_FRAME_TYPE_SIZE) != 0)
+    while (iterFrame < cProtocolFrameNumber && strncmp(buffer, protocol_frameId[iterFrame], PROTOCOL_FRAME_TYPE_SIZE) != 0)
         iterFrame++;
         
     assert(iterFrame <= cProtocolFrameNumber);
@@ -196,7 +196,7 @@ uint16_t protocol_createYOP(tProtocol_bufferYOP buffer)
 	buffer[pos] = PROTOCOL_FRAME_START;
 	pos += PROTOCOL_FRAME_START_SIZE;
 
-	memcpy(buffer + pos, protocol_FrameId[cProtocolFrameYOP], PROTOCOL_FRAME_TYPE_SIZE);
+	memcpy(buffer + pos, protocol_frameId[cProtocolFrameYOP], PROTOCOL_FRAME_TYPE_SIZE);
 	pos += PROTOCOL_FRAME_TYPE_SIZE;
 
 	buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -231,7 +231,7 @@ uint16_t protocol_createACK(tProtocol_bufferACK buffer)
 	buffer[pos] = PROTOCOL_FRAME_START;
 	pos += PROTOCOL_FRAME_START_SIZE;
 
-	memcpy(buffer + pos, protocol_FrameId[cProtocolFrameACK], PROTOCOL_FRAME_TYPE_SIZE);
+	memcpy(buffer + pos, protocol_frameId[cProtocolFrameACK], PROTOCOL_FRAME_TYPE_SIZE);
 	pos += PROTOCOL_FRAME_TYPE_SIZE;
 
 	buffer[pos] = PROTOCOL_FRAME_END;
@@ -264,7 +264,7 @@ uint16_t protocol_createSYN(const uint32_t timeData, tProtocol_bufferSYN buffer)
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameSYN], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameSYN], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -308,7 +308,7 @@ uint16_t protocol_createERR(const eProtocolError errNum, tProtocol_bufferERR buf
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameERR], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameERR], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -367,7 +367,7 @@ uint16_t protocol_createMOD(const eProtocolMode modeNum, tProtocol_bufferMOD buf
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameMOD], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameMOD], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -414,7 +414,7 @@ uint16_t protocol_createDR1(struct sProtocolDR1 const* sDr1, tProtocol_bufferDR1
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDR1], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDR1], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -468,7 +468,7 @@ uint16_t protocol_createDC1(struct sProtocolDC1 const* sDc1, tProtocol_bufferDC1
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDC1], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDC1], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -544,7 +544,7 @@ uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, tProtocol_bufferDCN
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -591,7 +591,7 @@ uint16_t protocol_initDCN(struct sProtocolDC1 const* sDc1, const uint32_t delta,
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -674,7 +674,7 @@ uint16_t protocol_createDA1(struct sProtocolDA1 const* sDa1, tProtocol_bufferDA1
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDA1], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDA1], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -762,7 +762,7 @@ uint16_t protocol_createDAN(struct sProtocolDAN const* sDan, tProtocol_bufferDAN
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
@@ -803,7 +803,7 @@ uint16_t protocol_initDAN(struct sProtocolDA1 const* sDa1, const uint32_t delta,
     buffer[pos] = PROTOCOL_FRAME_START;
     pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
+    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
     pos += PROTOCOL_FRAME_TYPE_SIZE;
 
     buffer[pos] = PROTOCOL_FRAME_SEP;
