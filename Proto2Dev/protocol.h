@@ -240,7 +240,7 @@
     /*--------END OF ENUMERATION--------*/
     cProtocolFrameNumber,   /**< Number of frame's type. */
     cProtocolFrameUnknow    /**< Value for an unknown type of frame. */
- } eProtocolFrame;
+ } iterFrameeProtocolFrame;
  
  /**
   *	Enumeration of bed sensor's runtime mode.
@@ -389,7 +389,7 @@
   *	
   *	@return The corresponding value of the identified frame hopefully, cProtocolFrameUnknow otherwise.
   */
-  eProtocolFrame protocol_FrameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE]);
+  iterFrameeProtocolFrame protocol_FrameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE]);
  
  //////////////////////////////////////////////////////////////////////////
  // Frame Parsing

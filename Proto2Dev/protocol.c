@@ -77,7 +77,7 @@ static void protocol_readFSC(uint16_t* fscValues);
  */
 static void protocol_readFSR(uint16_t* fsrValues);
 
-char const protocol_trameId[cProtocolTrameNumber][PROTOCOL_TRAME_TYPE_SIZE + 1] = {"ACK", 
+char const protocol_FrameId[cProtocolFrameNumber][PROTOCOL_FRAME_TYPE_SIZE + 1] = {"ACK", 
                                                                                    "YOP", 
                                                                                    "SYN",
                                                                                    "ERR", 
@@ -134,20 +134,20 @@ static void protocol_readFSR(uint16_t* fsrValues)
         fsrValues[iterFsr] = protocol_read16();
 }
 
-eProtocolTrame protocol_trameIdentification(char const buffer[PROTOCOL_TRAME_TYPE_SIZE])
+eProtocolFrame protocol_FrameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE])
 {
     assert(buffer != NULL);
 
-    eProtocolTrame iterTrame = 0;
-    while (iterTrame < cProtocolTrameNumber && strncmp(buffer, protocol_trameId[iterTrame], PROTOCOL_TRAME_TYPE_SIZE) != 0)
-        iterTrame++;
+    eProtocolFrame iterFrame = 0;
+    while (iterFrame < cProtocolFrameNumber && strncmp(buffer, protocol_FrameId[iterFrame], PROTOCOL_FRAME_TYPE_SIZE) != 0)
+        iterFrame++;
         
-    assert(iterTrame <= cProtocolTrameNumber);
+    assert(iterFrame <= cProtocolFrameNumber);
     
-    if (iterTrame == cProtocolTrameNumber)
-        iterTrame = cProtocolTrameUnknow;
+    if (iterFrame == cProtocolFrameNumber)
+        iterFrame = cProtocolFrameUnknow;
 
-    return iterTrame;
+    return iterFrame;
 }
 
 bool protocol_parseYOP(uint8_t* fsrNumber, uint8_t* fscNumber)
@@ -179,7 +179,7 @@ bool protocol_parseYOP(uint8_t* fsrNumber, uint8_t* fscNumber)
 		bOk = (*fscNumber != 0);
 	}
 	
-	return bOk && protocol_isEndOfTrame();
+	return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createYOP(tProtocol_bufferYOP buffer)
@@ -193,26 +193,26 @@ uint16_t protocol_createYOP(tProtocol_bufferYOP buffer)
 	
 	pos = 0;
 	
-	buffer[pos] = PROTOCOL_TRAME_START;
-	pos += PROTOCOL_TRAME_START_SIZE;
+	buffer[pos] = PROTOCOL_FRAME_START;
+	pos += PROTOCOL_FRAME_START_SIZE;
 
-	memcpy(buffer + pos, protocol_trameId[cProtocolTrameYOP], PROTOCOL_TRAME_TYPE_SIZE);
-	pos += PROTOCOL_TRAME_TYPE_SIZE;
+	memcpy(buffer + pos, protocol_FrameId[cProtocolFrameYOP], PROTOCOL_FRAME_TYPE_SIZE);
+	pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-	buffer[pos] = PROTOCOL_TRAME_SEP;
-	pos += PROTOCOL_TRAME_SEP_SIZE;
+	buffer[pos] = PROTOCOL_FRAME_SEP;
+	pos += PROTOCOL_FRAME_SEP_SIZE;
 
 	buffer[pos++] = PROTOCOL_FSR_NUMBER / 10 + '0';
 	buffer[pos++] = PROTOCOL_FSR_NUMBER % 10 + '0';
 	
-	buffer[pos] = PROTOCOL_TRAME_SEP;
-	pos += PROTOCOL_TRAME_SEP_SIZE;
+	buffer[pos] = PROTOCOL_FRAME_SEP;
+	pos += PROTOCOL_FRAME_SEP_SIZE;
 	
 	buffer[pos++] = PROTOCOL_FSC_NUMBER / 10 + '0';
 	buffer[pos++] = PROTOCOL_FSC_NUMBER % 10 + '0';
 	
-	buffer[pos] = PROTOCOL_TRAME_END;
-	pos += PROTOCOL_TRAME_END_SIZE;
+	buffer[pos] = PROTOCOL_FRAME_END;
+	pos += PROTOCOL_FRAME_END_SIZE;
 
 	assert(pos == PROTOCOL_YOP_SIZE);
 
@@ -228,14 +228,14 @@ uint16_t protocol_createACK(tProtocol_bufferACK buffer)
 
 	pos = 0;
 
-	buffer[pos] = PROTOCOL_TRAME_START;
-	pos += PROTOCOL_TRAME_START_SIZE;
+	buffer[pos] = PROTOCOL_FRAME_START;
+	pos += PROTOCOL_FRAME_START_SIZE;
 
-	memcpy(buffer + pos, protocol_trameId[cProtocolTrameACK], PROTOCOL_TRAME_TYPE_SIZE);
-	pos += PROTOCOL_TRAME_TYPE_SIZE;
+	memcpy(buffer + pos, protocol_FrameId[cProtocolFrameACK], PROTOCOL_FRAME_TYPE_SIZE);
+	pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-	buffer[pos] = PROTOCOL_TRAME_END;
-	pos += PROTOCOL_TRAME_END_SIZE;
+	buffer[pos] = PROTOCOL_FRAME_END;
+	pos += PROTOCOL_FRAME_END_SIZE;
 
 	assert(pos == PROTOCOL_ACK_SIZE);
 
@@ -249,7 +249,7 @@ bool protocol_parseSYN(uint32_t* timeData)
 
     *timeData = protocol_read32();
 
-    return protocol_isEndOfTrame();
+    return protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createSYN(const uint32_t timeData, tProtocol_bufferSYN buffer)
@@ -261,20 +261,20 @@ uint16_t protocol_createSYN(const uint32_t timeData, tProtocol_bufferSYN buffer)
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameSYN], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameSYN], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    memcpy(buffer + pos, &timeData, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    memcpy(buffer + pos, &timeData, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_END;
-    pos += PROTOCOL_TRAME_END_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_END;
+    pos += PROTOCOL_FRAME_END_SIZE;
 
     assert(pos == PROTOCOL_SYN_SIZE);
 
@@ -292,7 +292,7 @@ bool protocol_parseERR(eProtocolError* errNum)
     if (*errNum < cProtocolErrorNumber)
         bOk = true;
 
-    return bOk && protocol_isEndOfTrame();
+    return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createERR(const eProtocolError errNum, tProtocol_bufferERR buffer)
@@ -305,20 +305,20 @@ uint16_t protocol_createERR(const eProtocolError errNum, tProtocol_bufferERR buf
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameERR], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameERR], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    memcpy(buffer + pos, &errNum, PROTOCOL_TRAME_ERR_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    memcpy(buffer + pos, &errNum, PROTOCOL_FRAME_ERR_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_END;
-    pos += PROTOCOL_TRAME_END_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_END;
+    pos += PROTOCOL_FRAME_END_SIZE;
 
     assert(pos == PROTOCOL_ERR_SIZE);
 
@@ -351,7 +351,7 @@ bool protocol_parseMOD(eProtocolMode* modeNum)
     if (*modeNum < cProtocolModeNumber)
         bOk = true;
 
-    return bOk && protocol_isEndOfTrame();
+    return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createMOD(const eProtocolMode modeNum, tProtocol_bufferMOD buffer)
@@ -364,20 +364,20 @@ uint16_t protocol_createMOD(const eProtocolMode modeNum, tProtocol_bufferMOD buf
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameMOD], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameMOD], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    memcpy(buffer + pos, &modeNum, PROTOCOL_TRAME_MOD_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    memcpy(buffer + pos, &modeNum, PROTOCOL_FRAME_MOD_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_END;
-    pos += PROTOCOL_TRAME_END_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_END;
+    pos += PROTOCOL_FRAME_END_SIZE;
 
     assert(pos == PROTOCOL_MOD_SIZE);
 
@@ -398,7 +398,7 @@ bool protocol_parseDR1(struct sProtocolDR1* sDr1)
         bOk = true;
     }
 
-    return bOk && protocol_isEndOfTrame();
+    return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createDR1(struct sProtocolDR1 const* sDr1, tProtocol_bufferDR1 buffer)
@@ -411,26 +411,26 @@ uint16_t protocol_createDR1(struct sProtocolDR1 const* sDr1, tProtocol_bufferDR1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameDR1], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDR1], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDr1->time), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDr1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
     
-    endian_copyToB(buffer + pos, sDr1->fsrValues, PROTOCOL_TRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_TRAME_FSR_SIZE);
-    pos += PROTOCOL_TRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
+    endian_copyToB(buffer + pos, sDr1->fsrValues, PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_FRAME_FSR_SIZE);
+    pos += PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
 
-    buffer[pos] = PROTOCOL_TRAME_END;
-    pos += PROTOCOL_TRAME_END_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_END;
+    pos += PROTOCOL_FRAME_END_SIZE;
 
     assert(pos == PROTOCOL_DR1_SIZE);
 
@@ -452,7 +452,7 @@ bool protocol_parseDC1(struct sProtocolDC1* sDc1)
         bOk = true;
     }
 
-    return bOk && protocol_isEndOfTrame();
+    return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createDC1(struct sProtocolDC1 const* sDc1, tProtocol_bufferDC1 buffer)
@@ -465,26 +465,26 @@ uint16_t protocol_createDC1(struct sProtocolDC1 const* sDc1, tProtocol_bufferDC1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameDC1], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDC1], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDc1->time), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDc1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
     
-    endian_copyToB(buffer + pos, sDc1->fscValues, PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_TRAME_FSC_SIZE);
-    pos += PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
+    endian_copyToB(buffer + pos, sDc1->fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
+    pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
 
-    buffer[pos] = PROTOCOL_TRAME_END;
-    pos += PROTOCOL_TRAME_END_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_END;
+    pos += PROTOCOL_FRAME_END_SIZE;
 
     assert(pos == PROTOCOL_DC1_SIZE);
 
@@ -513,10 +513,10 @@ bool protocol_parseDCN(struct sProtocolDCN* sDcn)
                 /* At least one wave of sampling. */
                 protocol_readFSC(sDcn->fscValues[nbSamples]);
                 buf = protocol_readChar();
-                bOk = (buf == PROTOCOL_TRAME_SEP || buf == PROTOCOL_TRAME_END);
+                bOk = (buf == PROTOCOL_FRAME_SEP || buf == PROTOCOL_FRAME_END);
             /* if there is a separator then parse an other wave. */
             } while (   bOk &&
-                        buf == PROTOCOL_TRAME_SEP &&
+                        buf == PROTOCOL_FRAME_SEP &&
                         ++nbSamples <= PROTOCOL_DCN_SAMPLE_MAX);
             /* Too much waves ? */
             if (nbSamples > PROTOCOL_DCN_SAMPLE_MAX)
@@ -526,7 +526,7 @@ bool protocol_parseDCN(struct sProtocolDCN* sDcn)
         }
     }
 
-    return bOk && protocol_isEndOfTrame();
+    return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, tProtocol_bufferDCN buffer)
@@ -541,35 +541,35 @@ uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, tProtocol_bufferDCN
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameDCN], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDcn->time), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDcn->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDcn->delta), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDcn->delta), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
     for (iterSamples = 0 ; iterSamples < sDcn->nbSamples ; iterSamples++)
     {
-        buffer[pos] = PROTOCOL_TRAME_SEP;
-        pos += PROTOCOL_TRAME_SEP_SIZE;
+        buffer[pos] = PROTOCOL_FRAME_SEP;
+        pos += PROTOCOL_FRAME_SEP_SIZE;
         
-        endian_copyToB(buffer + pos, sDcn->fscValues[iterSamples], PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_TRAME_FSC_SIZE);
-        pos += PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
+        endian_copyToB(buffer + pos, sDcn->fscValues[iterSamples], PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
+        pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
     }
 
-    buffer[pos] = PROTOCOL_TRAME_END;
-    pos += PROTOCOL_TRAME_END_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_END;
+    pos += PROTOCOL_FRAME_END_SIZE;
 
     assert(pos >= PROTOCOL_DCN_MIN_SIZE);
     assert(pos < PROTOCOL_DATA_SIZE_MAX);
@@ -578,7 +578,7 @@ uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, tProtocol_bufferDCN
 
 }
 
-uint16_t protocol_initDCN(struct sProtocolDC1 const* sDc1, const uint32_t delta, uint8_t buffer[PROTOCOL_DCN_MIN_SIZE - PROTOCOL_TRAME_END])
+uint16_t protocol_initDCN(struct sProtocolDC1 const* sDc1, const uint32_t delta, uint8_t buffer[PROTOCOL_DCN_MIN_SIZE - PROTOCOL_FRAME_END])
 {
     /* $DCN,<TIME>,<DELTA>,<C0><C1>...<CN> */
     uint16_t pos;
@@ -588,27 +588,27 @@ uint16_t protocol_initDCN(struct sProtocolDC1 const* sDc1, const uint32_t delta,
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameDCN], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDc1->time), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDc1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &delta, PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &delta, PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
     pos += protocol_extendDCN(sDc1->fscValues, buffer + pos);
 
-    assert(pos == PROTOCOL_DCN_MIN_SIZE - PROTOCOL_TRAME_END);
+    assert(pos == PROTOCOL_DCN_MIN_SIZE - PROTOCOL_FRAME_END);
 
     return pos;
 }
@@ -622,22 +622,22 @@ uint16_t protocol_extendDCN(uint16_t const fscValues[PROTOCOL_FSC_NUMBER], uint8
 
     pos = 0;
     
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
     
-    endian_copyToB(buffer + pos, fscValues, PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_TRAME_FSC_SIZE);
-    pos += PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
+    endian_copyToB(buffer + pos, fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
+    pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
 
     assert(pos == PROTOCOL_DCN_VAR_SIZE);
 
     return pos;
 }
 
-inline uint16_t protocol_endDCN(uint8_t buffer[PROTOCOL_TRAME_END_SIZE])
+inline uint16_t protocol_endDCN(uint8_t buffer[PROTOCOL_FRAME_END_SIZE])
 {
-    buffer[0] = PROTOCOL_TRAME_END;
+    buffer[0] = PROTOCOL_FRAME_END;
     
-    return PROTOCOL_TRAME_END_SIZE;
+    return PROTOCOL_FRAME_END_SIZE;
 }
 
 bool protocol_parseDA1(struct sProtocolDA1* sDa1)
@@ -658,7 +658,7 @@ bool protocol_parseDA1(struct sProtocolDA1* sDa1)
         }
     }
 
-    return bOk && protocol_isEndOfTrame();
+    return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createDA1(struct sProtocolDA1 const* sDa1, tProtocol_bufferDA1 buffer)
@@ -671,32 +671,32 @@ uint16_t protocol_createDA1(struct sProtocolDA1 const* sDa1, tProtocol_bufferDA1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameDA1], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDA1], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDa1->time), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDa1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
     
-    endian_copyToB(buffer + pos, sDa1->fsrValues, PROTOCOL_TRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_TRAME_FSR_SIZE);
-    pos += PROTOCOL_TRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
+    endian_copyToB(buffer + pos, sDa1->fsrValues, PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_FRAME_FSR_SIZE);
+    pos += PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
     
-    endian_copyToB(buffer + pos, sDa1->fscValues, PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_TRAME_FSC_SIZE);
-    pos += PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
+    endian_copyToB(buffer + pos, sDa1->fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
+    pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
 
-    buffer[pos] = PROTOCOL_TRAME_END;
-    pos += PROTOCOL_TRAME_END_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_END;
+    pos += PROTOCOL_FRAME_END_SIZE;
 
     assert(pos == PROTOCOL_DA1_SIZE);
 
@@ -729,22 +729,22 @@ bool protocol_parseDAN(struct sProtocolDAN* sDan)
                 {
                     protocol_readFSC(sDan->fscValues[nbSamples]);
                     buf = protocol_readChar();
-                    bOk = (buf == PROTOCOL_TRAME_SEP || buf == PROTOCOL_TRAME_END);
+                    bOk = (buf == PROTOCOL_FRAME_SEP || buf == PROTOCOL_FRAME_END);
                 }
             /* if there is a separator then parse an other wave. */
             } while (   bOk &&
-                        buf == PROTOCOL_TRAME_SEP &&
+                        buf == PROTOCOL_FRAME_SEP &&
                         ++nbSamples < PROTOCOL_DAN_SAMPLE_MAX
                     );
             /* Too much waves ? */
             if (nbSamples > PROTOCOL_DCN_SAMPLE_MAX)
                 bOk = false;
             else
-                sDcn->nbSamples = nbSamples;
+                sDan->nbSamples = nbSamples;
         }
     }
 
-    return bOk && protocol_isEndOfTrame();
+    return bOk && protocol_isEndOfFrame();
 }
 
 uint16_t protocol_createDAN(struct sProtocolDAN const* sDan, tProtocol_bufferDAN buffer)
@@ -759,23 +759,23 @@ uint16_t protocol_createDAN(struct sProtocolDAN const* sDan, tProtocol_bufferDAN
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameDAN], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDan->time), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDan->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDan->delta), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDan->delta), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
     for (iterSamples = 0 ; iterSamples < sDan->nbSamples ; iterSamples++)
     {
@@ -790,7 +790,7 @@ uint16_t protocol_createDAN(struct sProtocolDAN const* sDan, tProtocol_bufferDAN
     return pos;
 }
 
-uint16_t protocol_initDAN(struct sProtocolDA1 const* sDa1, const uint32_t delta, uint8_t buffer[PROTOCOL_DAN_MIN_SIZE - PROTOCOL_TRAME_END])
+uint16_t protocol_initDAN(struct sProtocolDA1 const* sDa1, const uint32_t delta, uint8_t buffer[PROTOCOL_DAN_MIN_SIZE - PROTOCOL_FRAME_END])
 {
     /* $DAN,<TIME>,<DELTA>,<C0><C1>...<CN> */
     uint16_t pos;
@@ -800,27 +800,27 @@ uint16_t protocol_initDAN(struct sProtocolDA1 const* sDa1, const uint32_t delta,
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_START;
-    pos += PROTOCOL_TRAME_START_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_START;
+    pos += PROTOCOL_FRAME_START_SIZE;
 
-    memcpy(buffer + pos, protocol_trameId[cProtocolTrameDAN], PROTOCOL_TRAME_TYPE_SIZE);
-    pos += PROTOCOL_TRAME_TYPE_SIZE;
+    memcpy(buffer + pos, protocol_FrameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
+    pos += PROTOCOL_FRAME_TYPE_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &(sDa1->time), PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &(sDa1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
 
-    endian_copyToB(buffer + pos, &delta, PROTOCOL_TRAME_TIME_SIZE, PROTOCOL_TRAME_TIME_SIZE);
-    pos += PROTOCOL_TRAME_TIME_SIZE;
+    endian_copyToB(buffer + pos, &delta, PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    pos += PROTOCOL_FRAME_TIME_SIZE;
 
     pos += protocol_extendDAN(sDa1->fsrValues, sDa1->fscValues, buffer + pos);
 
-    assert(pos == PROTOCOL_DAN_MIN_SIZE - PROTOCOL_TRAME_END);
+    assert(pos == PROTOCOL_DAN_MIN_SIZE - PROTOCOL_FRAME_END);
 
     return pos;
 }
@@ -835,26 +835,26 @@ uint16_t protocol_extendDAN(uint16_t const fsrValues[PROTOCOL_FSR_NUMBER], uint1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
         
-    endian_copyToB(buffer + pos, fsrValues, PROTOCOL_TRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_TRAME_FSR_SIZE);
-    pos += PROTOCOL_TRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
+    endian_copyToB(buffer + pos, fsrValues, PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_FRAME_FSR_SIZE);
+    pos += PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
     
-    buffer[pos] = PROTOCOL_TRAME_SEP;
-    pos += PROTOCOL_TRAME_SEP_SIZE;
+    buffer[pos] = PROTOCOL_FRAME_SEP;
+    pos += PROTOCOL_FRAME_SEP_SIZE;
     
-    endian_copyToB(buffer + pos, fscValues, PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_TRAME_FSC_SIZE);
-    pos += PROTOCOL_TRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
+    endian_copyToB(buffer + pos, fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
+    pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
 
     assert(pos == PROTOCOL_DAN_VAR_SIZE);
 
     return pos;
 }
 
-inline uint16_t protocol_endDAN(uint8_t buffer[PROTOCOL_TRAME_END_SIZE])
+inline uint16_t protocol_endDAN(uint8_t buffer[PROTOCOL_FRAME_END_SIZE])
 {
-    buffer[0] = PROTOCOL_TRAME_END;
+    buffer[0] = PROTOCOL_FRAME_END;
     
-    return PROTOCOL_TRAME_END_SIZE;
+    return PROTOCOL_FRAME_END_SIZE;
 }

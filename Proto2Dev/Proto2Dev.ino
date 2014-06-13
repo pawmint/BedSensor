@@ -154,7 +154,7 @@ bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint
 				}
 				else
 				{
-					if (*bufferPos + PROTOCOL_DCN_VAR_SIZE + PROTOCOL_TRAME_END_SIZE > BUFFER_SIZE)
+					if (*bufferPos + PROTOCOL_DCN_VAR_SIZE + PROTOCOL_FRAME_END_SIZE > BUFFER_SIZE)
 					bFull = true;
 					else
 					{
@@ -229,7 +229,7 @@ uint8_t sleepMode(const uint32_t timeMax, const uint32_t delay, const uint16_t d
 			{
 				bStop = mysleep(delay, timeout);
 			}
-			memcpy(oldValues, sDr1.fsrValues, PROTOCOL_FSR_NUMBER * PROTOCOL_TRAME_FSR_SIZE);
+			memcpy(oldValues, sDr1.fsrValues, PROTOCOL_FSR_NUMBER * PROTOCOL_FRAME_FSR_SIZE);
 		} while (!bStop && !bActivity);
 	}
 
