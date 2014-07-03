@@ -4,9 +4,13 @@
 #include <math.h>
 
 #include "ADS7828.h"
+#include "_24XX1026.h"
 #include "protocol.h"
 
 #define BUFFER_SIZE 128
+
+uint32_t id1;
+uint32_t id2;
 
 bool mysleep(uint32_t delay, uint32_t timeout);
 bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint32_t fscDelay, uint8_t buffer[BUFFER_SIZE], uint16_t* bufferPos);
@@ -21,8 +25,12 @@ bool sendData(uint8_t* buffer, uint16_t size)
 
 bool getFSRSensor(uint16_t* values)
 {
-
+	uint8_t i;
 	ADS7828_getAllValues(0b00, ADS7828_AD_CONVERTER_ON | ADS7828_INTERNAL_REF_ON | ADS7828_SINGLE_ENDED_I, false, values);
+	for (i = 0 ; i < PROTOCOL_FSR_NUMBER ; i++)
+	{
+		values[i] /= 2;
+	}
 
 	return true;
 }
@@ -52,17 +60,23 @@ uint16_t old;
 
 void setup()
 {
+	id1 = 0;
+	id2 = 0;
 	Serial.begin(9600);
 	ADS7828_init();
 	protocol_createACK(ackBuf);
-	Serial.println("start");
 	bufferPos += protocol_createYOP(buffer + bufferPos);
 	sendData(buffer, bufferPos);
 	bufferPos = 0;
+        startAT();
+        getATSH(&id1);
+        getATSL(&id2);
+        stopAT();
 }
 
 void loop()
 {
+	
 	old = bufferPos;
 	if (sleepMode(10000, 1000, 512, buffer, &bufferPos))
 	{
@@ -77,6 +91,99 @@ void loop()
 	}
 	else
 		sendData(ackBuf, PROTOCOL_ACK_SIZE);
+}
+
+uint8_t readSerial()
+{
+  while(!Serial.available());
+  return Serial.read();
+}
+
+bool readOK()
+{
+  	if (readSerial() != 'O')
+                return false;
+	if (readSerial() != 'K')
+		return false;
+	if (readSerial() != '\r')
+		return false;
+  return true;
+}
+
+bool startAT()
+{
+  delay(2000);
+  Serial.print("+++");
+  delay(2000);
+  return readOK();
+}
+bool stopAT()
+{
+  Serial.print("ATCN\r");
+  return readOK();
+}
+
+bool getATSL(uint32_t* id)
+{
+	bool stop = false;
+	uint8_t i = 0;
+	uint8_t j;
+	uint8_t buf;
+	uint8_t buf1[8];
+
+        *id=0;
+	Serial.print("ATSL\r");
+	do 
+	{
+		buf = readSerial();
+		stop = (buf == '\r');
+		if (!stop)
+		{
+                        if(i > 7)
+			  return false;
+			buf1[i++] = buf;
+		}
+	} while (!stop);
+	for ( j = 0 ; j < i ; j++)
+	{
+		buf1[j] -= (isDigit(buf1[j]) ? '0' : ('A' - 10));
+        *id |= (((uint32_t) buf1[j]) << (28 - (j + (8 - i)) * 4));
+	}
+	
+	*id = endian_htonl(*id);
+	return true;
+}
+
+bool getATSH(uint32_t* id)
+{
+        
+	bool stop = false;
+	uint8_t i = 0;
+	uint8_t j;
+	uint8_t buf;
+	uint8_t buf1[8];
+
+        *id=0;
+	Serial.print("ATSH\r");
+	do 
+	{
+		buf = readSerial();
+		stop = (buf == '\r');
+		if (!stop)
+		{
+                        if(i > 7)
+			  return false;
+			buf1[i++] = buf;
+		}
+	} while (!stop);
+	for ( j = 0 ; j < i ; j++)
+	{
+		buf1[j] -= (isDigit(buf1[j]) ? '0' : ('A' - 10));
+		*id |= (((uint32_t) buf1[j]) << (28 - (j + (8 - i)) * 4));
+	}
+	
+	*id = endian_htonl(*id);
+	return true;
 }
 
 bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint32_t fscDelay, uint8_t buffer[BUFFER_SIZE], uint16_t* bufferPos)
