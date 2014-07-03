@@ -10,13 +10,13 @@
  */
 
 #ifndef ENDIAN_H
-# define ENDIAN_H
+ #define ENDIAN_H
  
-# include <inttypes.h>
-# include <string.h>
+ #include <inttypes.h>
+ #include <string.h>
  
  /* Define if the host processor use big endian order. */
-//# define ENDIAN_BIG_ENDIAN
+// #define ENDIAN_BIG_ENDIAN
  
  /**
   * @def    endian_htons(n)
@@ -38,24 +38,24 @@
   * @brief  Convert 4 bytes integer from  big endian to host order.
   */
  
-# ifdef ENDIAN_BIG_ENDIAN
-#  define endian_htons(n)           (n)
-#  define endian_htonl(n)           (n)
-# else
-#  define endian_htons(n)           (((((uint16_t)(n) & 0xFF)) << 8) | (((uint16_t)(n) & 0xFF00) >> 8))
-#  define endian_htonl(n)           (   ((((uint32_t)(n) & 0xFF))<< 24)         | \
+ #ifdef ENDIAN_BIG_ENDIAN
+  #define endian_htons(n)           (n)
+  #define endian_htonl(n)           (n)
+ #else
+  #define endian_htons(n)           (((((uint16_t)(n) & 0xFF)) << 8) | (((uint16_t)(n) & 0xFF00) >> 8))
+  #define endian_htonl(n)           (   ((((uint32_t)(n) & 0xFF))<< 24)         | \
                                         ((((uint32_t)(n) & 0xFF00)) << 8)       | \
                                         ((((uint32_t)(n) & 0xFF0000)) >> 8)     | \
                                         ((((uint32_t)(n) & 0xFF000000)) >> 24)    \
                                     )
-# endif
+ #endif
 
-# define endian_ntohs(n)            endian_htons(n)
-# define endian_ntohl(n)            endian_htonl(n)
+ #define endian_ntohs(n)            endian_htons(n)
+ #define endian_ntohl(n)            endian_htonl(n)
 
-# ifdef __cplusplus
-   extern "C"{
-# endif
+ #ifdef __cplusplus
+  extern "C"{
+ #endif
  
  /**
   *	Copies memory area to big endian.
@@ -118,7 +118,7 @@
   */
  void* endian_copyToB(void* dest, void const* src, const size_t n, const size_t size);
  
-# ifdef __cplusplus
+ #ifdef __cplusplus
    }
-# endif
+ #endif
 #endif

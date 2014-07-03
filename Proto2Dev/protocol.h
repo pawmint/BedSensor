@@ -15,89 +15,89 @@
  */
 
 #ifndef PROTOCOL_H
-# define PROTOCOL_H
+ #define PROTOCOL_H
 
-# include <inttypes.h>
-# include <string.h>
-# include <assert.h>
+ #include <inttypes.h>
+ #include <string.h>
+ #include <assert.h>
  
-# ifndef __cplusplus
-#  include <stdbool.h>
-# endif
+ #ifndef __cplusplus
+  #include <stdbool.h>
+ #endif
  
-# include "endian.h"
+ #include "endian.h"
 
   /**
    *    Leading character of frames.
    */
-# define PROTOCOL_FRAME_START       '$'
+ #define PROTOCOL_FRAME_START       '$'
   /**
    *    Terminating character of frames.
    */
-# define PROTOCOL_FRAME_END         '\n'
+ #define PROTOCOL_FRAME_END         '\n'
   /**
    *    Separating character between argument in frames.
    */
-# define PROTOCOL_FRAME_SEP         ','
+ #define PROTOCOL_FRAME_SEP         ','
   /**
    *    Size of the start of frames.
    */
-# define PROTOCOL_FRAME_START_SIZE  sizeof(char)
+ #define PROTOCOL_FRAME_START_SIZE  sizeof(char)
   /**
    *    Size of the end of frames.
    */
-# define PROTOCOL_FRAME_END_SIZE    sizeof(char)
+ #define PROTOCOL_FRAME_END_SIZE    sizeof(char)
   /**
    *    Size of a separator in frames.
    */
-# define PROTOCOL_FRAME_SEP_SIZE    sizeof(char)
+ #define PROTOCOL_FRAME_SEP_SIZE    sizeof(char)
   /**
    *    Size of a frame type identifier.
    */
-# define PROTOCOL_FRAME_TYPE_SIZE   sizeof(char) * 3
+ #define PROTOCOL_FRAME_TYPE_SIZE   sizeof(char) * 3
   /**
    *    Size of a time argument in frames.
    */
-# define PROTOCOL_FRAME_TIME_SIZE   sizeof(uint32_t)
+ #define PROTOCOL_FRAME_TIME_SIZE   sizeof(uint32_t)
   /**
    *    Size of an error argument in frames.
    */
-# define PROTOCOL_FRAME_ERR_SIZE    sizeof(eProtocolError)
+ #define PROTOCOL_FRAME_ERR_SIZE    sizeof(eProtocolError)
   /**
    *    Size of a runtime mode identifier in a frames.
    */
-# define PROTOCOL_FRAME_MOD_SIZE    sizeof(eProtocolMode)
+ #define PROTOCOL_FRAME_MOD_SIZE    sizeof(eProtocolMode)
   /**
    *    Number of FSR sensors in the bed.
    *    
    *    @todo Think about an extern constant.
    */
-# define PROTOCOL_FSR_NUMBER        8
+ #define PROTOCOL_FSR_NUMBER        8
   /**
    *    Number of FSC sensors in the bed.
    *    
    *    @todo Think about an extern constant.
    */
-# define PROTOCOL_FSC_NUMBER        2
+ #define PROTOCOL_FSC_NUMBER        2
   /**
    *    Size of an FSR sensor's data in frames.
    */
-# define PROTOCOL_FRAME_FSR_SIZE    sizeof(uint16_t)
+ #define PROTOCOL_FRAME_FSR_SIZE    sizeof(uint16_t)
   /**
    *    Size of an FSC sensor's data in frames.
    */
-# define PROTOCOL_FRAME_FSC_SIZE    sizeof(uint16_t)
+ #define PROTOCOL_FRAME_FSC_SIZE    sizeof(uint16_t)
   /**
    *    Size of an ACK frame.
    */
-# define PROTOCOL_ACK_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_ACK_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_END_SIZE)                             \
                                     )
   /**
    *    Size of an YOP frame.
    */
-# define PROTOCOL_YOP_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_YOP_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (2)                                                 + \
@@ -108,7 +108,7 @@
   /**
    *    Size of a SYN frame.
    */                                                                
-# define PROTOCOL_SYN_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_SYN_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_TIME_SIZE)                          + \
@@ -117,7 +117,7 @@
   /**
    *	Size of an ERR frame.
    */
-# define PROTOCOL_ERR_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_ERR_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_ERR_SIZE)                           + \
@@ -126,7 +126,7 @@
   /**
    *	Size of an MOD frame.
    */
-# define PROTOCOL_MOD_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_MOD_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_MOD_SIZE)                           + \
@@ -135,18 +135,20 @@
   /**
    *	Size of a DR1 frame.
    */
-# define PROTOCOL_DR1_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_DR1_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
-                                        (PROTOCOL_FRAME_TIME_SIZE)                          + \
+                                        (sizeof(uint64_t))                                  + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_FSR_SIZE) * (PROTOCOL_FSR_NUMBER)   + \
                                         (PROTOCOL_FRAME_END_SIZE)                             \
                                     )
+                                    /*(PROTOCOL_FRAME_TIME_SIZE)                          + \
+                                        (PROTOCOL_FRAME_SEP_SIZE)                           + \*/
   /**
    *	Size of a DC1 frame.
    */
-# define PROTOCOL_DC1_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_DC1_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_TIME_SIZE)                          + \
@@ -157,7 +159,7 @@
   /**
    *	Size of a DA1 frame.
    */
-# define PROTOCOL_DA1_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_DA1_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_TIME_SIZE)                          + \
@@ -170,13 +172,13 @@
   /**
    *	Size between a DCN frame of n elements and a DCN frame of n + 1 elements.
    */
-# define PROTOCOL_DCN_VAR_SIZE      (   (PROTOCOL_FRAME_SEP_SIZE)                           + \
+ #define PROTOCOL_DCN_VAR_SIZE      (   (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_FSC_SIZE) * (PROTOCOL_FSC_NUMBER)     \
                                     )
   /**
    *	Minimum size of a DCN frame.
    */
-# define PROTOCOL_DCN_MIN_SIZE      (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_DCN_MIN_SIZE      (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_TIME_SIZE)                          + \
@@ -188,7 +190,7 @@
   /**
    *    Size between a DAN frame of n elements and a DAN frame of n + 1 elements.
    */
-# define PROTOCOL_DAN_VAR_SIZE      (   (PROTOCOL_FRAME_SEP_SIZE)                           + \
+ #define PROTOCOL_DAN_VAR_SIZE      (   (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_FSR_SIZE) * (PROTOCOL_FSR_NUMBER)   + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_FSC_SIZE) * (PROTOCOL_FSC_NUMBER)     \
@@ -196,7 +198,7 @@
   /**
    *    Minimum size of a DAN frame.
    */
-# define PROTOCOL_DAN_MIN_SIZE      (   (PROTOCOL_FRAME_START_SIZE)                         + \
+ #define PROTOCOL_DAN_MIN_SIZE      (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_TIME_SIZE)                          + \
@@ -208,15 +210,15 @@
   /**
    *	Maximum size of a frame in this protocol.
    */
-# define PROTOCOL_DATA_SIZE_MAX     1024
+ #define PROTOCOL_DATA_SIZE_MAX     1024
   /**
    *	Maximum number of samples in a DCN frame.
    */
-# define PROTOCOL_DCN_SAMPLE_MAX    (((PROTOCOL_DATA_SIZE_MAX) - (PROTOCOL_DCN_MIN_SIZE)) / (PROTOCOL_DCN_VAR_SIZE) + 1)
+ #define PROTOCOL_DCN_SAMPLE_MAX    (((PROTOCOL_DATA_SIZE_MAX) - (PROTOCOL_DCN_MIN_SIZE)) / (PROTOCOL_DCN_VAR_SIZE) + 1)
   /**
    *	Maximum number of samples in a DAN frame.
    */
-# define PROTOCOL_DAN_SAMPLE_MAX    (((PROTOCOL_DATA_SIZE_MAX) - (PROTOCOL_DAN_MIN_SIZE)) / (PROTOCOL_DAN_VAR_SIZE) + 1)
+ #define PROTOCOL_DAN_SAMPLE_MAX    (((PROTOCOL_DATA_SIZE_MAX) - (PROTOCOL_DAN_MIN_SIZE)) / (PROTOCOL_DAN_VAR_SIZE) + 1)
 
  /**
   *	Enumeration of all frame's type.
@@ -339,26 +341,27 @@
 /**
  *	Waiting to find a start of frame delimiter.
  */
-# define protocol_waitStartOfFrame()    while (!protocol_isStartOfFrame())
+ #define protocol_waitStartOfFrame()    while (!protocol_isStartOfFrame())
 /**
  *	Determines if the next character is a start of frame delimiter.
  *  
  *  @return true if the next character is a start of frame delimiter, false otherwise.
  */
-# define protocol_isStartOfFrame()      (protocol_readChar() == PROTOCOL_FRAME_START)
+ #define protocol_isStartOfFrame()      (protocol_readChar() == PROTOCOL_FRAME_START)
 /**
  *	Determines if the next character is a end of frame delimiter.
  *  
  *  @return true if the next character is a end of frame delimiter, false otherwise.
  */
-# define protocol_isEndOfFrame()        (protocol_readChar() == PROTOCOL_FRAME_END)
+ #define protocol_isEndOfFrame()        (protocol_readChar() == PROTOCOL_FRAME_END)
 /**
  *	Determines if the next character is an argument separator.
  *  
  *  @return true if the next character is an argument separator, false otherwise.
  */
-# define protocol_isSeparator()         (protocol_readChar() == PROTOCOL_FRAME_SEP)
+ #define protocol_isSeparator()         (protocol_readChar() == PROTOCOL_FRAME_SEP)
  
+ extern uint32_t id1, id2;
  /**
   *	Table of frame identifier.
   * 
@@ -374,9 +377,9 @@
  */
  extern char (*protocol_readChar)(void);
 
-# ifdef __cplusplus
+ #ifdef __cplusplus
   extern "C"{
-# endif
+ #endif
 
  //////////////////////////////////////////////////////////////////////////
  // Frame Identification
@@ -401,7 +404,7 @@
   *  
   *  @see protocol_createACK()
   */
-# define protocol_parseACK() protocol_isEndOfFrame()
+ #define protocol_parseACK() protocol_isEndOfFrame()
 
  /**
   *	Tries to parse a YOP frame.
@@ -792,7 +795,7 @@
   */
  inline uint16_t protocol_endDAN(uint8_t buffer[PROTOCOL_FRAME_END_SIZE]);
  
-# ifdef __cplusplus
+ #ifdef __cplusplus
   }
-# endif
+ #endif
 #endif
