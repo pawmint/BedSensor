@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DoxySettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SettingsFile>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\doxySettings.xml</SettingsFile>
+  <ProjectName>Proto2Dev</ProjectName>
+  <DoxyExePath>C:\Program Files\doxygen\bin\doxygen.exe</DoxyExePath>
+  <UseDefaultSettings>true</UseDefaultSettings>
+  <GenerateAsPartOfBuild>true</GenerateAsPartOfBuild>
+  <ConfigFilePath>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\doxyfile</ConfigFilePath>
+  <OutputDirPath>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\doxygen</OutputDirPath>
+  <Excluded>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\Visual Micro\.Proto2Dev.vsarduino.h</Excluded>
+  <ShowErrorsAndWarnings>false</ShowErrorsAndWarnings>
+</DoxySettings>
