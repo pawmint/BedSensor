@@ -77,6 +77,26 @@ static void protocol_readFSC(uint16_t* fscValues);
  */
 static void protocol_readFSR(uint16_t* fsrValues);
 
+/**
+ *	@todo doc
+ */
+static void protocol_addSep(uint8_t* buffer, uint16_t* pos);
+
+/**
+ *	@todo doc
+ */
+static void protocol_addFrameId(uint8_t* buffer, uint16_t* pos, eProtocolFrame id);
+
+/**
+ *	@todo doc
+ */
+static void protocol_addStart(uint8_t* buffer, uint16_t* pos);
+
+/**
+ *	@todo doc
+ */
+static void protocol_addEnd(uint8_t* buffer, uint16_t* pos);
+
 char const protocol_frameId[cProtocolFrameNumber][PROTOCOL_FRAME_TYPE_SIZE + 1] = {"ACK", 
                                                                                    "YOP", 
                                                                                    "SYN",
@@ -132,6 +152,30 @@ static void protocol_readFSR(uint16_t* fsrValues)
 
     for (iterFsr = 0 ; iterFsr < PROTOCOL_FSR_NUMBER ; iterFsr++)
         fsrValues[iterFsr] = protocol_read16();
+}
+
+static void protocol_addSep(uint8_t* buffer, uint16_t* pos)
+{
+    buffer[*pos] = PROTOCOL_FRAME_SEP;
+    *pos += PROTOCOL_FRAME_SEP_SIZE;
+}
+
+static void protocol_addFrameId(uint8_t* buffer, uint16_t* pos, eProtocolFrame id)
+{
+    memcpy(buffer + *pos, protocol_frameId[id], PROTOCOL_FRAME_TYPE_SIZE);
+    *pos += PROTOCOL_FRAME_TYPE_SIZE;
+}
+
+static void protocol_addStart(uint8_t* buffer, uint16_t* pos)
+{
+    buffer[*pos] = PROTOCOL_FRAME_START;
+    *pos += PROTOCOL_FRAME_START_SIZE;
+}
+
+static void protocol_addEnd(uint8_t* buffer, uint16_t* pos)
+{
+    buffer[*pos] = PROTOCOL_FRAME_END;
+    *pos += PROTOCOL_FRAME_END_SIZE;
 }
 
 eProtocolFrame protocol_frameIdentification(char const buffer[PROTOCOL_FRAME_TYPE_SIZE])
@@ -193,20 +237,14 @@ uint16_t protocol_createYOP(tProtocol_bufferYOP buffer)
 	
 	pos = 0;
 	
-	buffer[pos] = PROTOCOL_FRAME_START;
-	pos += PROTOCOL_FRAME_START_SIZE;
-
-	memcpy(buffer + pos, protocol_frameId[cProtocolFrameYOP], PROTOCOL_FRAME_TYPE_SIZE);
-	pos += PROTOCOL_FRAME_TYPE_SIZE;
-
-	buffer[pos] = PROTOCOL_FRAME_SEP;
-	pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addStart(buffer, &pos);
+    protocol_addFrameId(buffer, &pos, cProtocolFrameYOP);
+	protocol_addSep(buffer, &pos);
 
 	buffer[pos++] = PROTOCOL_FSR_NUMBER / 10 + '0';
 	buffer[pos++] = PROTOCOL_FSR_NUMBER % 10 + '0';
 	
-	buffer[pos] = PROTOCOL_FRAME_SEP;
-	pos += PROTOCOL_FRAME_SEP_SIZE;
+	protocol_addSep(buffer, &pos);
 	
 	buffer[pos++] = PROTOCOL_FSC_NUMBER / 10 + '0';
 	buffer[pos++] = PROTOCOL_FSC_NUMBER % 10 + '0';
@@ -228,11 +266,9 @@ uint16_t protocol_createACK(tProtocol_bufferACK buffer)
 
 	pos = 0;
 
-	buffer[pos] = PROTOCOL_FRAME_START;
-	pos += PROTOCOL_FRAME_START_SIZE;
+	protocol_addStart(buffer, &pos);
 
-	memcpy(buffer + pos, protocol_frameId[cProtocolFrameACK], PROTOCOL_FRAME_TYPE_SIZE);
-	pos += PROTOCOL_FRAME_TYPE_SIZE;
+	protocol_addFrameId(buffer, &pos, cProtocolFrameACK);
 
 	buffer[pos] = PROTOCOL_FRAME_END;
 	pos += PROTOCOL_FRAME_END_SIZE;
@@ -261,20 +297,16 @@ uint16_t protocol_createSYN(const uint32_t timeData, tProtocol_bufferSYN buffer)
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameSYN], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameSYN);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     memcpy(buffer + pos, &timeData, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_END;
-    pos += PROTOCOL_FRAME_END_SIZE;
+    protocol_addEnd(buffer, &pos);
 
     assert(pos == PROTOCOL_SYN_SIZE);
 
@@ -305,20 +337,16 @@ uint16_t protocol_createERR(const eProtocolError errNum, tProtocol_bufferERR buf
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameERR], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameERR);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     memcpy(buffer + pos, &errNum, PROTOCOL_FRAME_ERR_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_END;
-    pos += PROTOCOL_FRAME_END_SIZE;
+    protocol_addEnd(buffer, &pos);
 
     assert(pos == PROTOCOL_ERR_SIZE);
 
@@ -364,20 +392,16 @@ uint16_t protocol_createMOD(const eProtocolMode modeNum, tProtocol_bufferMOD buf
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameMOD], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameMOD);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     memcpy(buffer + pos, &modeNum, PROTOCOL_FRAME_MOD_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_END;
-    pos += PROTOCOL_FRAME_END_SIZE;
+    protocol_addEnd(buffer, &pos);
 
     assert(pos == PROTOCOL_MOD_SIZE);
 
@@ -411,26 +435,28 @@ uint16_t protocol_createDR1(struct sProtocolDR1 const* sDr1, tProtocol_bufferDR1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDR1], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+   protocol_addFrameId(buffer, &pos, cProtocolFrameDR1);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
-
-    endian_copyToB(buffer + pos, &(sDr1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    protocol_addSep(buffer, &pos);
+    
+    memcpy(buffer + pos, &id1, sizeof(uint32_t));
+    pos+= sizeof(uint32_t);
+    memcpy(buffer + pos, &id2, sizeof(uint32_t));
+    pos+= sizeof(uint32_t);
+    
+    protocol_addSep(buffer, &pos);
+    
+    /*endian_copyToB(buffer + pos, &(sDr1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);*/
     
     endian_copyToB(buffer + pos, sDr1->fsrValues, PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_FRAME_FSR_SIZE);
     pos += PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
 
-    buffer[pos] = PROTOCOL_FRAME_END;
-    pos += PROTOCOL_FRAME_END_SIZE;
+    protocol_addEnd(buffer, &pos);
 
     assert(pos == PROTOCOL_DR1_SIZE);
 
@@ -465,26 +491,21 @@ uint16_t protocol_createDC1(struct sProtocolDC1 const* sDc1, tProtocol_bufferDC1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDC1], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameDC1);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDc1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
     
     endian_copyToB(buffer + pos, sDc1->fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
     pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
 
-    buffer[pos] = PROTOCOL_FRAME_END;
-    pos += PROTOCOL_FRAME_END_SIZE;
+    protocol_addEnd(buffer, &pos);
 
     assert(pos == PROTOCOL_DC1_SIZE);
 
@@ -541,20 +562,16 @@ uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, tProtocol_bufferDCN
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameDCN);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDcn->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDcn->delta), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
@@ -568,8 +585,7 @@ uint16_t protocol_createDCN(struct sProtocolDCN const* sDcn, tProtocol_bufferDCN
         pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
     }
 
-    buffer[pos] = PROTOCOL_FRAME_END;
-    pos += PROTOCOL_FRAME_END_SIZE;
+    protocol_addEnd(buffer, &pos);
 
     assert(pos >= PROTOCOL_DCN_MIN_SIZE);
     assert(pos < PROTOCOL_DATA_SIZE_MAX);
@@ -588,20 +604,16 @@ uint16_t protocol_initDCN(struct sProtocolDC1 const* sDc1, const uint32_t delta,
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDCN], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameDCN);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDc1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &delta, PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
@@ -622,8 +634,7 @@ uint16_t protocol_extendDCN(uint16_t const fscValues[PROTOCOL_FSC_NUMBER], uint8
 
     pos = 0;
     
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
     
     endian_copyToB(buffer + pos, fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
     pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
@@ -671,32 +682,26 @@ uint16_t protocol_createDA1(struct sProtocolDA1 const* sDa1, tProtocol_bufferDA1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDA1], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameDA1);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDa1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
     
     endian_copyToB(buffer + pos, sDa1->fsrValues, PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_FRAME_FSR_SIZE);
     pos += PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
     
     endian_copyToB(buffer + pos, sDa1->fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
     pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
 
-    buffer[pos] = PROTOCOL_FRAME_END;
-    pos += PROTOCOL_FRAME_END_SIZE;
+    protocol_addEnd(buffer, &pos);
 
     assert(pos == PROTOCOL_DA1_SIZE);
 
@@ -759,20 +764,16 @@ uint16_t protocol_createDAN(struct sProtocolDAN const* sDan, tProtocol_bufferDAN
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameDAN);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDan->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDan->delta), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
@@ -800,20 +801,16 @@ uint16_t protocol_initDAN(struct sProtocolDA1 const* sDa1, const uint32_t delta,
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_START;
-    pos += PROTOCOL_FRAME_START_SIZE;
+    protocol_addStart(buffer, &pos);
 
-    memcpy(buffer + pos, protocol_frameId[cProtocolFrameDAN], PROTOCOL_FRAME_TYPE_SIZE);
-    pos += PROTOCOL_FRAME_TYPE_SIZE;
+    protocol_addFrameId(buffer, &pos, cProtocolFrameDAN);
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &(sDa1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
 
     endian_copyToB(buffer + pos, &delta, PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
@@ -835,14 +832,12 @@ uint16_t protocol_extendDAN(uint16_t const fsrValues[PROTOCOL_FSR_NUMBER], uint1
 
     pos = 0;
 
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
         
     endian_copyToB(buffer + pos, fsrValues, PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_FRAME_FSR_SIZE);
     pos += PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
     
-    buffer[pos] = PROTOCOL_FRAME_SEP;
-    pos += PROTOCOL_FRAME_SEP_SIZE;
+    protocol_addSep(buffer, &pos);
     
     endian_copyToB(buffer + pos, fscValues, PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER, PROTOCOL_FRAME_FSC_SIZE);
     pos += PROTOCOL_FRAME_FSC_SIZE * PROTOCOL_FSC_NUMBER;
