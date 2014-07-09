@@ -9,5 +9,5 @@ The program :
 - Send a YOP frame (old style with sensor number)
 - Enter in infinite loop :
   
-  + If sensors value then send a DR1 frame
+  + If sensors values change then send a DR1 frame
   + Else send a ACK frame periodicaly
