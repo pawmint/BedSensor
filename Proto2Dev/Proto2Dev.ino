@@ -9,9 +9,6 @@
 
 #define BUFFER_SIZE 128
 
-uint32_t id1;
-uint32_t id2;
-
 bool mysleep(uint32_t delay, uint32_t timeout);
 bool acquisitionMode(const uint32_t timeMax, const uint32_t fsrDelay, const uint32_t fscDelay, uint8_t buffer[BUFFER_SIZE], uint16_t* bufferPos);
 uint8_t sleepMode(const uint32_t timeMax, const uint32_t delay, const uint16_t delta, uint8_t buffer[BUFFER_SIZE], uint16_t* bufferPos);
@@ -27,10 +24,6 @@ bool getFSRSensor(uint16_t* values)
 {
 	uint8_t i;
 	ADS7828_getAllValues(0b00, ADS7828_AD_CONVERTER_ON | ADS7828_INTERNAL_REF_ON | ADS7828_SINGLE_ENDED_I, false, values);
-	for (i = 0 ; i < PROTOCOL_FSR_NUMBER ; i++)
-	{
-		values[i] /= 2;
-	}
 
 	return true;
 }
@@ -60,18 +53,12 @@ uint16_t old;
 
 void setup()
 {
-	id1 = 0;
-	id2 = 0;
 	Serial.begin(9600);
 	ADS7828_init();
 	protocol_createACK(ackBuf);
 	bufferPos += protocol_createYOP(buffer + bufferPos);
 	sendData(buffer, bufferPos);
 	bufferPos = 0;
-        startAT();
-        getATSH(&id1);
-        getATSL(&id2);
-        stopAT();
 }
 
 void loop()
