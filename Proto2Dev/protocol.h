@@ -138,13 +138,12 @@
  #define PROTOCOL_DR1_SIZE          (   (PROTOCOL_FRAME_START_SIZE)                         + \
                                         (PROTOCOL_FRAME_TYPE_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
-                                        (sizeof(uint64_t))                                  + \
+                                        (PROTOCOL_FRAME_TIME_SIZE)                          + \
                                         (PROTOCOL_FRAME_SEP_SIZE)                           + \
                                         (PROTOCOL_FRAME_FSR_SIZE) * (PROTOCOL_FSR_NUMBER)   + \
                                         (PROTOCOL_FRAME_END_SIZE)                             \
                                     )
-                                    /*(PROTOCOL_FRAME_TIME_SIZE)                          + \
-                                        (PROTOCOL_FRAME_SEP_SIZE)                           + \*/
+                                    /**/
   /**
    *	Size of a DC1 frame.
    */
@@ -361,7 +360,6 @@
  */
  #define protocol_isSeparator()         (protocol_readChar() == PROTOCOL_FRAME_SEP)
  
- extern uint32_t id1, id2;
  /**
   *	Table of frame identifier.
   * 

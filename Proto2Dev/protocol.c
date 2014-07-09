@@ -437,21 +437,14 @@ uint16_t protocol_createDR1(struct sProtocolDR1 const* sDr1, tProtocol_bufferDR1
 
     protocol_addStart(buffer, &pos);
 
-   protocol_addFrameId(buffer, &pos, cProtocolFrameDR1);
+    protocol_addFrameId(buffer, &pos, cProtocolFrameDR1);
 
     protocol_addSep(buffer, &pos);
     
-    memcpy(buffer + pos, &id1, sizeof(uint32_t));
-    pos+= sizeof(uint32_t);
-    memcpy(buffer + pos, &id2, sizeof(uint32_t));
-    pos+= sizeof(uint32_t);
-    
-    protocol_addSep(buffer, &pos);
-    
-    /*endian_copyToB(buffer + pos, &(sDr1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
+    endian_copyToB(buffer + pos, &(sDr1->time), PROTOCOL_FRAME_TIME_SIZE, PROTOCOL_FRAME_TIME_SIZE);
     pos += PROTOCOL_FRAME_TIME_SIZE;
 
-    protocol_addSep(buffer, &pos);*/
+    protocol_addSep(buffer, &pos);
     
     endian_copyToB(buffer + pos, sDr1->fsrValues, PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER, PROTOCOL_FRAME_FSR_SIZE);
     pos += PROTOCOL_FRAME_FSR_SIZE * PROTOCOL_FSR_NUMBER;
