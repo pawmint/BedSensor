@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include "ADS7828.h"
-#include "_24XX1026.h"
 #include "protocol.h"
 
 #include "xbee_api.h"
@@ -13,7 +12,6 @@
 
 bool mysleep(uint32_t delay, uint32_t timeout);
 uint8_t sleepMode(const uint32_t timeMax, const uint32_t delay, const uint16_t delta, uint8_t buffer[BUFFER_SIZE], uint16_t* bufferPos);
-void manager(void);
 bool setAPIMode(uint8_t mode);
 
 void sendBytesFunc(unsigned char* buffer, unsigned long size)
@@ -43,54 +41,36 @@ char (*protocol_readChar)(void) = &monRead;
 
 
 uint8_t buffer[BUFFER_SIZE];
-uint8_t ackBuf[PROTOCOL_ACK_SIZE];
 uint16_t bufferPos = 0;
-uint16_t old;
 xbee_TxFrame64 tx64;
+struct sProtocolDR1 sDr1;
 
 void setup()
 {
     tx64.frameId = 1;
     tx64.destinationAddress = 0xFFFFLL;
-    tx64.options = 0;
+    tx64.options = 0x01;
 
 	Serial.begin(9600);
 	ADS7828_init();
-    xbee_Init(NULL, NULL, NULL, NULL, NULL, NULL, &sendBytesFunc, &flushFunc);
-	protocol_createACK(ackBuf);
+        xbee_Init(NULL, NULL, NULL, NULL, NULL, NULL, &sendBytesFunc, &flushFunc);
+
 	bufferPos += protocol_createYOP(buffer + bufferPos);
-        setAPIMode(1);
         tx64.data = buffer;
-    tx64.dataSize = bufferPos;
-    xbee_SendTxFrame64(&tx64);
-	bufferPos = 0;
+        tx64.dataSize = PROTOCOL_YOP_SIZE;
+        xbee_SendTxFrame64(&tx64);
+        
+        tx64.data = buffer;
+        tx64.dataSize = PROTOCOL_DR1_SIZE;
 }
 
 void loop()
 {
-	
-	old = bufferPos;
-	if (sleepMode(10000, 1000, 512, buffer, &bufferPos))
-	{
-        tx64.data = buffer;
-        tx64.dataSize = bufferPos;
+        getFSRSensor(sDr1.fsrValues);
+        sDr1.time = millis();
+	protocol_createDR1(&sDr1, buffer);
+        
         xbee_SendTxFrame64(&tx64);
-		bufferPos=0;
-	}
-	else if (bufferPos != old)
-	{
-        tx64.data = buffer;
-        tx64.dataSize = bufferPos;
-        xbee_SendTxFrame64(&tx64);
-		bufferPos=0;
-		delay(1000);
-	}
-	else
-    {
-        tx64.data = ackBuf;
-        tx64.dataSize = PROTOCOL_ACK_SIZE;
-        xbee_SendTxFrame64(&tx64);
-    }
 }
 
 uint8_t readSerial()
@@ -222,6 +202,8 @@ uint8_t sleepMode(const uint32_t timeMax, const uint32_t delay, const uint16_t d
 		getFSRSensor(oldValues);
 		bFirst = false;
 	}
+        
+
 	if (*bufferPos + PROTOCOL_DR1_SIZE > BUFFER_SIZE)
 	bFull = true;
 	else
