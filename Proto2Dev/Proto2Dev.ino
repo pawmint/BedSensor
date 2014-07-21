@@ -3,11 +3,18 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "ADS7828.h"
-#include "_24XX1026.h"
+#define ONESENSOR
+
+#ifdef ONESENSOR
+    #include "ADS7828.h"
+#endif
+
+// #include "_24XX1026.h"
 #include "protocol.h"
 
 #include "xbee_api.h"
+
+
 
 #define BUFFER_SIZE 100
 
@@ -25,21 +32,16 @@ void flushFunc(void)
 {
   Serial.flush();
 }
+
 bool getFSRSensor(uint16_t* values)
 {
-	ADS7828_getAllValues(0b00, ADS7828_AD_CONVERTER_ON | ADS7828_INTERNAL_REF_ON | ADS7828_SINGLE_ENDED_I, false, values);
-
+    #ifdef ONESENSOR
+        values[0] = analogRead(A0) << 2;
+    #else
+        ADS7828_getAllValues(0b00, ADS7828_AD_CONVERTER_ON | ADS7828_INTERNAL_REF_ON | ADS7828_SINGLE_ENDED_I, false, values);
+    #endif
 	return true;
 }
-
-
-char monRead(void){
-	char rep;
-	scanf("%c%*c", &rep);
-	return rep;
-}
-
-char (*protocol_readChar)(void) = &monRead;
 
 
 uint8_t buffer[BUFFER_SIZE];
@@ -57,9 +59,10 @@ void setup()
 	Serial.begin(9600);
 	ADS7828_init();
     xbee_Init(NULL, NULL, NULL, NULL, NULL, NULL, &sendBytesFunc, &flushFunc);
-	protocol_createACK(ackBuf);
-	bufferPos += protocol_createYOP(buffer + bufferPos);
+	protocol_ACK_create(ackBuf, NULL);
+	bufferPos += protocol_YOP_create(buffer + bufferPos, NULL);
         setAPIMode(1);
+        
         tx64.data = buffer;
     tx64.dataSize = bufferPos;
     xbee_SendTxFrame64(&tx64);
@@ -147,7 +150,7 @@ bool getATSL(uint32_t* id)
 	for ( j = 0 ; j < i ; j++)
 	{
 		buf1[j] -= (isDigit(buf1[j]) ? '0' : ('A' - 10));
-        *id |= (((uint32_t) buf1[j]) << (28 - (j + (8 - i)) * 4));
+        *id |= (((uint32_t) buf1[j]) << (28 - (j + (8 - i)) *  4));
 	}
 	
 	*id = endian_htonl(*id);
@@ -179,7 +182,7 @@ bool getATSH(uint32_t* id)
 	for ( j = 0 ; j < i ; j++)
 	{
 		buf1[j] -= (isDigit(buf1[j]) ? '0' : ('A' - 10));
-		*id |= (((uint32_t) buf1[j]) << (28 - (j + (8 - i)) * 4));
+		*id |= (((uint32_t) buf1[j]) << (28 - (j + (8 - i)) *  4));
 	}
 	
 	*id = endian_htonl(*id);
@@ -213,7 +216,7 @@ uint8_t sleepMode(const uint32_t timeMax, const uint32_t delay, const uint16_t d
 	bool bStop = false;
 	bool bActivity = false;
 	uint8_t i;
-	struct sProtocolDR1 sDr1;
+	struct sProtocolDR1 sData;
 	
 	assert(delta < 4096);
 	
@@ -228,24 +231,24 @@ uint8_t sleepMode(const uint32_t timeMax, const uint32_t delay, const uint16_t d
 	{
 		bActivity = false;
 		do {
-			getFSRSensor(sDr1.fsrValues);
+			getFSRSensor(sData.fsrValues);
 			i = 0;
 			do
 			{
-				bActivity = ( (((oldValues[i] > sDr1.fsrValues[i]) ? oldValues[i] : sDr1.fsrValues[i]) - ((oldValues[i] < sDr1.fsrValues[i]) ? oldValues[i] : sDr1.fsrValues[i])) >= delta);
+				bActivity = ( (((oldValues[i] > sData.fsrValues[i]) ? oldValues[i] : sData.fsrValues[i]) - ((oldValues[i] < sData.fsrValues[i]) ? oldValues[i] : sData.fsrValues[i])) >= delta);
 				i++;
 			} while (!bActivity && i < PROTOCOL_FSR_NUMBER);
 			if (bActivity)
 			{
 				
-				sDr1.time = millis();
-				*bufferPos += protocol_createDR1(&sDr1, buffer + *bufferPos);
+				sData.time = millis();
+				*bufferPos += protocol_DR1_create(buffer + *bufferPos, &sData);
 			}
 			else
 			{
 				bStop = mysleep(delay, timeout);
 			}
-			memcpy(oldValues, sDr1.fsrValues, PROTOCOL_FSR_NUMBER * PROTOCOL_FRAME_FSR_SIZE);
+			memcpy(oldValues, sData.fsrValues, PROTOCOL_FSR_NUMBER *  PROTOCOL_FRAME_FSR_SIZE);
 		} while (!bStop && !bActivity);
 	}
 

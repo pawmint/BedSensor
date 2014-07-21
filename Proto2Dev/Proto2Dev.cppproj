@@ -361,15 +361,6 @@ build.arch=AVR
     </VisualMicroSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Visual Micro\.Proto2Dev.vsarduino.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_24XX1026.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_24XX1026.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="ADS7828.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -382,18 +373,101 @@ build.arch=AVR
     <Compile Include="endian.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Proto2Dev.ino">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="protocol.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="protocol.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="protocol_AAA.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_ACK.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_ACK.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_api.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_api_private.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_api_private.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_DC1.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_DC1.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_DCN.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_DCN.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_DR1.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_DR1.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_ERR.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_ERR.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_frames.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_manifest.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_MOD.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_MOD.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_YOP.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_YOP.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Visual Micro\.Proto2Dev.vsarduino.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="xbee_api.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="xbee_api.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="xbee_api_def.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_24XX1026.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_24XX1026.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Visual Micro\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Proto2Dev.ino">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="Proto2DevDoc.dox">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
