@@ -750,7 +750,7 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                 ="C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\_24XX1026.cpp" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\_24XX1026.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\ADS7828.cpp" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\ADS7828.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\endian.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\endian.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\Proto2Dev.ino" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\Proto2DevDoc.dox" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_AAA.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ACK.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ACK.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_api.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_api_private.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_api_private.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DC1.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DC1.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DCN.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DCN.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DR1.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DR1.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ERR.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ERR.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_frames.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_manifest.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_MOD.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_MOD.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_YOP.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_YOP.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\xbee_api.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\xbee_api.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\xbee_api_def.h" 
+INPUT                 ="C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\_24XX1026.cpp" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\_24XX1026.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\ADS7828.cpp" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\ADS7828.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\endian.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\endian.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\Proto2Dev.ino" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\Proto2DevDoc.dox" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_AAA.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ACK.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ACK.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_api_private.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_api_private.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DC1.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DC1.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DCN.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DCN.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DR1.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_DR1.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ERR.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_ERR.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_manifest.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_MOD.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_MOD.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_STA.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_STA.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_YOP.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\protocol_YOP.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\xbee_api.c" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\xbee_api.h" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\xbee_api_def.h" 
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -869,7 +869,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = 
+IMAGE_PATH             = "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\imageDoc"
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -1114,7 +1114,7 @@ HTML_FOOTER            =
 # obsolete.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_STYLESHEET        = 
+HTML_STYLESHEET        =
 
 # The HTML_EXTRA_STYLESHEET tag can be used to specify an additional user-
 # defined cascading style sheet that is included after the standard style sheets
@@ -1125,7 +1125,7 @@ HTML_STYLESHEET        =
 # see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  = 
+HTML_EXTRA_STYLESHEET  =   "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\doxygen_html_style.css"
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1135,7 +1135,7 @@ HTML_EXTRA_STYLESHEET  =
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       = 
+HTML_EXTRA_FILES       =  "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\fileDoc\ads7828.pdf" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\fileDoc\3103_0_interlink-fsr-user-guide.pdf" "C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\fileDoc\fsr_sensor_board_20120523.pdf"
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the stylesheet and background images according to
@@ -1782,7 +1782,7 @@ RTF_HYPERLINKS         = NO
 # default style sheet that doxygen normally uses.
 # This tag requires that the tag GENERATE_RTF is set to YES.
 
-RTF_STYLESHEET_FILE    = 
+RTF_STYLESHEET_FILE    = "doxygen_html_style.css"
 
 # Set optional variables used in the generation of an RTF document. Syntax is
 # similar to doxygen's config file. A template extensions file can be generated

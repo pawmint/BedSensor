@@ -1,7 +1,187 @@
 /**
     @mainpage
-    ceci est un test
+    ceci est un test.
+    @ref hardwareConfiguration
+    @ref softwareArchitecture
+    @ref arduinoProgrammation
+    @ref xbeeConfiguration
+
+*/
+
+/**
+    @page hardwareConfiguration Hardware configuration of Bedsensor prototype
+    
+    This page describes and explains all important things to know about hardware configuration and linkage of bedsensor's components.
+    
+    @section Multiplexageboard Multiplexage board
+        The board supplied by I2R is a printed circuit board for the multiplexage of eight analog channels and the convertion of signals from analogic to digital.
+        The following picture shows the board and its important parts. The main components of the board is the ADS7828. The communication with the board is in fact the 
+        communication with the ADS7828 ship. A driver has been developp in order to work with it : @ref ADS7828.h.
+        @image html jit.jpg
+        
+        @subsection Alimentation Alimentation
+            The board can be supply by three way :
+                - Using the connector jack power with a external power source of 3V.
+                - Using connectors on the side of the board tagged +3.3V and GND as shown in @ref Connectiontothearduino subsection.
+                - Using straight connectors tagged +3.3V and GND showed in the following picture.
+            
+            @image html jitplug.JPG
+
+        @subsection Connectiontothearduino Connection to the Arduino Uno
+            Arduino and the board communicate throught an I2C bus (@ref abouti2c). Two wires named SDA (Serial Data Line) and SCL (Serial Clock Line) should be placed in order to ensure 
+            the communication.
+            The following picture shows the I2C connection and power sharing between the Arduino Uno and the I2R board.
+            @note GND Wire can be plug in one of the two GND pin of the Arduino Uno.
+            @warning The sequence between SDA and SCL are different on the I2R board and on the Arduino Uno.
+
+            @image html jitLink.JPG
+
+        @subsection I2Caddressconfiguration I2C address configuration
+            As explain in the page @ref abouti2c , like other I2C devices, ADS7828 has a configurable I2C address on two bits. They can be set with I2C addr jumpers named \c J10 and \c J11 on 
+            the I2R board. As yon can see on the following picture, I2C address bit can be set to value \c 0 by placing jumpers on middle and right connectors and can be set to \c 1 by placing 
+            jumpers on left and middle connectors. The jumper \c J10 set the bit generally named \c A0 who is the most significant bit (MSB) of the I2C address and the jumper \c J11 set the bit generally 
+            named \c A1 whois the less significant bit (LSB) of the I2C address. On the picture \c J10 and \c J11 are coding \c 0 so the I2C address will be \c 0b00 .
+            @image html jiti2caddr.JPG
+
+        @subsection Voltagedividerconfiguration Voltage divider configuration
+            Each analog channel of the I2R board use a voltage divider in order to manage the sensibility of the pluged sensor.
+            @image html volatgedivider.JPG
+
+            The previous image extract from the datasheet of the FSRs sensors shows the scheme of a voltage divider and a plot of the outpt voltage depending on the second resistor's value (RM).
+            The voltage follower (the AOP with feedback (the kind of triangle with a wire who come back)) ensures that there is no influence of the circuit part at the right of him, on the left part. This 
+            component is already on the ADS7828 so there isn't replaced on the board.
+
+            @image html jitvolt.JPG
+
+            The RM value can be set thank to variable resistor placed on the board. The resistor can be changed with a Phillips screwdriver between a min position (0 ohm) and a max position (100 kohm).
+            I advice to set the RM value to 17 kohm for our application. To performed an accurate set, you should use an ohmmeter with the input lane on the corresponding test point and the COM lane 
+            on Vout sensor pin such as on the next picture.
+
+            @image html jitMulti.JPG
+
+            For more information about de multiplexage board, refers to :
+                - <a href="ads7828.pdf">the ADS7828's datasheet</a>;
+                - <a href="3103_0_interlink-fsr-user-guide.pdf">the FSR's datasheet</a>;
+                - <a href="fsr_sensor_board_20120523.pdf">the wiring plan of the board</a>.
+
+    @section ArduinoBoard Arduino Board
+        @image html arduino.JPG
+
+        @subsection Powersupply Power supply
+            The Arduino Uno can be powered by three different way :
+                - The USB interface;
+                - The power supply jack with a recommended input voltage between \c 7V and \c 12V and limits input voltage between \c 6V and \c 20V ;
+                - Using the power pin of the board : The positive power supply wire should be link to the \c VIN pin and the ground wire should be link to one of the three \c GND pin.
+
+        @subsection Directlinktosensors Direct link to sensors
+            You can directly plug a sensor thank to the analog input of the Arduino Uno named from \c A0 to \c A5.
+            The folowing scheme shows the connetion of the voltage divider to the Arduino board with the pin \c A0. Don't forget that pin \c A4 and pin \c A5 are reserved for I2C bus.
+            @image html Arduino1FSR.png 
+    
+    @section ShieldXbee Shield Xbee
+        @subsection Plugashield Plug a shield
+            Pretty simple, just considers the orientation.
+            @image html aruinoShield2.JPG
+
+        @subsection PluganXbeemodule Plug an Xbee module
+            Same as previous...
+            @image html shieldxbee1.JPG
+
+        @subsection SelectUSARTsource Select USART source
+            The Xbee module and the Arduino Uno communicate throught the USART bus materialized by the RX and TX lanes. The same bus is used by the Arduino Uno to communicate by the USB interface. To avoid interferences 
+            between this two components the Xbee shield has a switch to select the correct input depending on the application. The \c MICRO position allows the communication with the Xbee and the \c USB position allows
+             the communication with the USB interface.
+             @note Don't forget to use this switch when you would flash the Arduino's microcontroller through USB.
+
+             @image html shieldswitch.JPG
+             
+    @section XbibUdev Xbib U-dev
+        The Xbib U-dev is an USB interface for Xbee module. It is used for interfacing an Xbee module with a UbiGate platform like BeagleBone Black or Raspberry Pi.
+        This board was designed for the prototyping with Xbee and has lot of features of which we do not serve us. It shouldn't be used as a final product and 
+        should be replaced by a simplest device like <a href="http://www.lextronic.fr/P2901-platine-dinterface-usb-pour-modules-xbee.html">this one</a>.
+        
+        @image html xbibDr.JPG
+
+        @subsection PluganXbeemodule Plug an Xbee module
+            Same as Xbee module on Xbee Shield
+            @image html xbibxbee1.JPG
+
+        @subsection Theloopbackjumper The loop-back jumper
+            The Xbib U-dev is trasparent for the Xbee and the PC. Send data to the Xbib U-dev is equivalent to send data to the Xbee. The only thing who affect the communication is the loopback option.
+            When you communicate with the Xbee "by hand", it could be nice to see what you send and a loop-back jumper is available to handle this issue.
+            In production mode the loop-back should be disable as shown in the next picture.
+
+            @image html xbibloopback2.JPG
+
+        @subsection ConnexionfromPCtoXbee Connexion from PC to Xbee
+            -# <b>Windows :</b>
+                There are several applications to perform serial connection. You can use the well known PuTTY available on is <a href="http://www.putty.org/">official website</a>.
+                To start a communication with the Xbee :
+                    - Open the device manager from the control panel;
+                    - In <tt>Ports (COM and LPT)</tt> subtree, find the right lane;
+                    - Launch putty;
+                    - Select the \c Session category;
+                    - In <tt>Connection type</tt>, select \c Serial;
+                    - In <tt>Serial line</tt> text box, copy the name of the lane. In the example \c COM7 ;
+                    - Launch the communication by clicking on \c Open button.
+
+                @image html putty.JPG
+
+            -# <b>Linux :</b>
+                Like windows, you have many ways to perform a serial commnication.
+                - First you need to find the descriptor of the device : It can be found in the \c /dev/serial directory 
+                    The exact path should be \c /dev/serial/by-id/usb-FTDI_XBIB-U-DEV-if00-port0 ;
+                - Then launch a suitable application like \c minicom or \c screen :
+                    @code{.sh}
+                        minicom -b 9600 -D /dev/serial/by-id/usb-FTDI_XBIB-U-DEV-if00-port0
+                    @endcode
+                    @code{.sh}
+                        screen /dev/serial/by-id/usb-FTDI_XBIB-U-DEV-if00-port0 9600
+                    @endcode
+                .  
+                
+            -# <b>Mac :</b>
+               There's an app for that 
+
+            Then all that you typing on your keyboard is sent to the Serial bus and Xbee's answers are displayed in the application. If you would see what you are typing, think about the loop-back jumper.
+*/
+
+/**
+    @page softwareArchitecture Software architecture
+    @section secglob Global scheme
+    @section secuc Control Unit
+    @section secxbeeapi Xbee API
+        @ref  xbee_api.c
+    @section secbedprot Bedsensor protocol
 
 
 
+*/
+
+/**
+    @page arduinoProgrammation Arduino programmation
+    @section secardide Arduino IDE
+    @section secatmel Atmel Studio
+    @section seccodeon Upload code on arduino
+    @section secbooton Upload new bootloader
+
+*/
+
+/**
+    @page xbeeConfiguration Xbee configuration
+    @section secxctu X-CTU
+    @section secmolto Moltosenso Network Manager
+    @section secmanconfxbee Manual configuration
+
+*/
+
+/**
+    @page aboutI2C About I2C
+
+    @section seci2cov Overview
+    @section seci2ctop Topologically
+    @section seci2c2lay Data link layer
+        @subsection Data format
+        @subsection Adressing method
+    @section secwirelib Wire library
 */
