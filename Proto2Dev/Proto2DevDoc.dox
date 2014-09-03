@@ -159,12 +159,35 @@
 */
 
 /**
-    @page arduinoProgrammation Arduino programmation
+    @page arduinoProgrammation Arduino Uno programmation
     @section secardide Arduino IDE
-    @section secatmel Atmel Studio
-    @section seccodeon Upload code on arduino
-    @section secbooton Upload new bootloader
+       The Arduino IDE is an open-source software written in Java (boooouh) to write and upload code in Arduino fammily boards.
+       It works on Windows, Linux and Mac and is available on the <a href="http://www.arduino.cc/en/Main/Software">Arduino website</a>.
+       The good point of this software is that is ready for use and very simple. I think there is no need to explain how it work, you can quickly go around it.
 
+    @section secatmel Atmel Studio
+        Atmel Studio is the integrated development environnement for developing and debugging ARM Cortex-M processor-based and AVR microcontroller applications. Atmel 
+        It is based on Mircosoft Visual Studio and is only available on Window. He has lot of features for embedeed developpement and it is a real IDE compare to Arduino IDE.
+        It can be download on the <a href="http://www.atmel.com/tools/atmelstudio.aspx">Atmel website</a>.
+        You should add the <a href="http://www.visualmicro.com/">visual micro</a> extension in order to have a full Arduino programming environment.
+        I advice you too to add <tt>Terminal for Atmel Studio</tt> extension to have a better serie terminal than the default integrated.
+        You can add <tt>Doxygen Integartor</tt> extension for the handling of doxygen configuration and generation used to make this documentation.
+        The <tt>AStyle</tt> extension add a better formatting of C and C++ files. The three last extension can be found on <tt>Tools->Extension Manager</tt> of Atmel Studio.
+
+    @section secavr AVR toolchain
+        If you are a true extremist on ArchLinux with a zsh shell and a full configurated neoVim, you maybe don't want of a clickodrome. Hopefully, Arduino IDE, Atmel Studio and al. used in back end 
+        open source compiler and CLI utility. The AVR toolchain is a collection of tools and librairies used to create applications for AVR microcontrollers. This collection includes compiler, 
+        assembler, linker and Standard C & math libraries. Most of these tools are based on efforts from GNU, and some are developed by Atmel. It can be download from Atmel website for
+        <a href="http://www.atmel.com/tools/atmelavrtoolchainforwindows.aspx">Windows</a> and for <a href="http://www.atmel.com/tools/atmelavrtoolchainforlinux.aspx">Linux</a>
+        (for Atmega328, choose the 8-bit version).
+    
+    @section secbooton Upload a new bootloader
+        The bootloader is a program allowing the boot and the configuration of the Arduino Uno's microcontroller. IDE presented in previous part gice features in order to flash this bootloader based
+        on <a href="https://savannah.nongnu.org/projects/avrdude">avrdude</a> utility.
+        It can be really usefull to have the best configuration for our application especially for power consumption issues. You can't flash the bootloader as you reprogram the microcontroller. 
+        You need to use a third party device named programmer. There are several programmer like <a href="http://www.atmel.com/tools/MATUREAVRISP.aspx">AVR ISP</a>, 
+        <a href="https://learn.adafruit.com/usbtinyisp">USBtinyISP</a> or a <a href="http://arduino.cc/en/Hacking/ParallelProgrammer">parallel programmer</a>. You can also use an Arduino board as 
+        a programmer in order to flash the bootloader of an other Arduino board. A good tutorial explains how to make <a href="http://arduino.cc/en/Tutorial/ArduinoISP">an ISP programmer with Arduino</a> .
 */
 
 /**
