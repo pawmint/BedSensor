@@ -66,6 +66,21 @@
 #define PROTOCOL_FRAME_TYPE_SIZE   sizeof(char) *  3
 
 /**
+ *  Size of a battery level field in frames.
+ */
+#define PROTOCOL_FRAME_BAT_SIZE     sizeof(char) * 3
+
+/**
+ *  Size of a fsr sensors number field in frames.
+ */
+#define PROTOCOL_FRAME_FSR_NUMBER_SIZE  sizeof(char) * 2
+
+/**
+ *  Size of fsc sensors number in frames.
+ */
+#define PROTOCOL_FRAME_FSC_NUMBER_SIZE  sizeof(char) * 2
+
+/**
 * Size of the leading common part of frames.
 */
 #define PROTOCOL_HEADER_SIZE       (   (PROTOCOL_FRAME_START_SIZE) +                             \
@@ -138,8 +153,8 @@
  *  Generates prototype for setter define with PROTOCOL_GENERATE_FUNCVAR_SETTER() .
  */
 #define PROTOCOL_GENERATE_FUNCVAR_PROTOTYPE(x)                                                      \
-    void protocol_ ## x ## _setCallBackFunc(tProtocol_ ## x ## _callBackFunc newCallBackFunc);      \
-    void protocol_ ## x ## _setAskCallBackFunc(tProtocol_AskCallBackFunc newAskCallBackFunc);
+    inline void protocol_ ## x ## _setCallBackFunc(tProtocol_ ## x ## _callBackFunc newCallBackFunc);      \
+    inline void protocol_ ## x ## _setAskCallBackFunc(tProtocol_AskCallBackFunc newAskCallBackFunc);
 
 
 /**
@@ -229,7 +244,7 @@ enum eProtocolFrame
  */
 
 /**
- *  Type of function who ca be call when a ask frame is received.
+ *  Type of function who can be call when a ask frame is received.
  */
 typedef void (*tProtocol_AskCallBackFunc)(void);
 
@@ -240,6 +255,7 @@ typedef void (*tProtocol_AskCallBackFunc)(void);
 #include "protocol_DR1.h"
 #include "protocol_DC1.h"
 #include "protocol_DCN.h"
+#include "protocol_STA.h"
 
 /**
  *  Extract frame from a buffer and call function for processing.
