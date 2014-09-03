@@ -200,6 +200,58 @@ void readFSR(uint16_t* fsrValues)
     moveCursor(sizeof(uint16_t) *  PROTOCOL_FSR_NUMBER);
 }
 
+bool read99(uint8_t* num)
+{
+    bool bRep = true;
+    
+    assert(num != NULL);
+    assert(getCursorSize() >= 3);
+    
+    bRep = bRep && isdigit(getCursor());
+    if (bRep)
+    {
+        *num = (getCursor() -  '0') * 100;
+        nextCursor();
+    }
+    bRep = bRep && isdigit(getCursor());
+    if (bRep)
+    {
+        *num += (getCursor() -  '0') * 10;
+        nextCursor();
+    }
+    bRep = bRep && isdigit(getCursor());
+    if (bRep)
+    {
+        *num += (getCursor() -  '0');
+        nextCursor();
+    }
+    
+    return bRep;
+}
+
+bool read999(uint16_t* num)
+{
+    bool bRep = true;
+    
+    assert(num != NULL);
+    assert(getCursorSize() >= 2);
+    
+    bRep = bRep && isdigit(getCursor());
+    if (bRep)
+    {
+        *num = (getCursor() -  '0') * 10;
+        nextCursor();
+    }
+    bRep = bRep && isdigit(getCursor());
+    if (bRep)
+    {
+        *num += (getCursor() -  '0');
+        nextCursor();
+    }
+    
+    return bRep;
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 void addSep(uint8_t* buffer, uint16_t* pos)

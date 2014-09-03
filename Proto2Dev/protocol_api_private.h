@@ -15,6 +15,7 @@
 #include "protocol.h"
 #include <inttypes.h>
 #include <assert.h>
+#include <ctype.h>
 
 
 #ifndef __cplusplus
@@ -112,6 +113,15 @@ uint16_t read16(void);
  */
 uint32_t read32(void);
 
+/**
+ *  @todo doc
+ */
+bool read99(uint8_t* num);
+
+/**
+ *  @todo doc
+ */
+bool read999(uint16_t* num);
 
 /**
  *  @todo doc
