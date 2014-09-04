@@ -6,7 +6,6 @@
   <UseDefaultSettings>true</UseDefaultSettings>
   <GenerateAsPartOfBuild>true</GenerateAsPartOfBuild>
   <ConfigFilePath>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\doxyfile</ConfigFilePath>
-  <OutputDirPath>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\doxygen</OutputDirPath>
-  <Excluded>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedSensor\Proto2Dev\Visual Micro\.Proto2Dev.vsarduino.h</Excluded>
+  <OutputDirPath>C:\Fichiers\Cours\ISIMA\Dropbox\ZZ2\Stage\LIRMM\HomeGateway\Mai\BedSensor\BedDoc</OutputDirPath>
   <ShowErrorsAndWarnings>false</ShowErrorsAndWarnings>
 </DoxySettings>
