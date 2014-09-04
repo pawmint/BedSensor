@@ -11,8 +11,9 @@
 
 // #include "_24XX1026.h"
 #include "protocol.h"
-
+#include "communicating.h"
 #include "xbee_api.h"
+#include "sampling.h"
 
 
 
@@ -28,27 +29,17 @@ void sendBytesFunc(unsigned char* buffer, unsigned long size)
     Serial.write(buffer, size);
 }
 
-void flushFunc(void)
+static inline void flushFunc(void)
 {
-  Serial.flush();
+    Serial.flush();
 }
-
-bool getFSRSensor(uint16_t* values)
-{
-    #ifdef ONESENSOR
-        values[0] = analogRead(A0) << 2;
-    #else
-        ADS7828_getAllValues(0b00, ADS7828_AD_CONVERTER_ON | ADS7828_INTERNAL_REF_ON | ADS7828_SINGLE_ENDED_I, false, values);
-    #endif
-	return true;
-}
-
 
 uint8_t buffer[BUFFER_SIZE];
 uint8_t ackBuf[PROTOCOL_ACK_SIZE];
 uint16_t bufferPos = 0;
 uint16_t old;
 xbee_TxFrame64 tx64;
+
 
 void setup()
 {

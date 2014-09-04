@@ -367,6 +367,18 @@ build.arch=AVR
     <Compile Include="ADS7828.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="BedSleep.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bedSleep.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="communicating.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="communicating.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="endian.c">
       <SubType>compile</SubType>
     </Compile>
@@ -386,9 +398,6 @@ build.arch=AVR
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="protocol_ACK.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="protocol_api.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="protocol_api_private.c">
@@ -421,9 +430,6 @@ build.arch=AVR
     <Compile Include="protocol_ERR.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="protocol_frames.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="protocol_manifest.h">
       <SubType>compile</SubType>
     </Compile>
@@ -433,10 +439,22 @@ build.arch=AVR
     <Compile Include="protocol_MOD.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="protocol_STA.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="protocol_STA.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="protocol_YOP.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="protocol_YOP.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sampling.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sampling.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Visual Micro\.Proto2Dev.vsarduino.h">
