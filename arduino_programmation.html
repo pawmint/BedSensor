@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>Proto2Dev: Main Page</title>
+<title>Proto2Dev: Arduino Uno programmation</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -39,8 +39,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li class="current"><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -61,7 +61,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -76,16 +75,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+</div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">Proto2Dev Documentation</div>  </div>
+<div class="title">Arduino Uno programmation </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>ceci est un test.<a class="el" href="hardware_configuration.html">Hardware configuration of Bedsensor prototype</a> <a class="el" href="software_architecture.html">Software architecture</a> <a class="el" href="arduino_programmation.html">Arduino Uno programmation</a> <a class="el" href="xbee_configuration.html">Xbee configuration</a> </p>
+<div class="textblock"><h1><a class="anchor" id="secardide"></a>
+Arduino IDE</h1>
+<p>The Arduino IDE is an open-source software written in Java (boooouh) to write and upload code in Arduino fammily boards. It works on Windows, Linux and Mac and is available on the <a href="http://www.arduino.cc/en/Main/Software">Arduino website</a>. The good point of this software is that is ready for use and very simple. I think there is no need to explain how it work, you can quickly go around it.</p>
+<h1><a class="anchor" id="secatmel"></a>
+Atmel Studio</h1>
+<p>Atmel Studio is the integrated development environnement for developing and debugging ARM Cortex-M processor-based and AVR microcontroller applications. Atmel It is based on Mircosoft Visual Studio and is only available on Window. He has lot of features for embedeed developpement and it is a real IDE compare to Arduino IDE. It can be download on the <a href="http://www.atmel.com/tools/atmelstudio.aspx">Atmel website</a>. You should add the <a href="http://www.visualmicro.com/">visual micro</a> extension in order to have a full Arduino programming environment. I advice you too to add <code>Terminal for Atmel Studio</code> extension to have a better serie terminal than the default integrated. You can add <code>Doxygen Integartor</code> extension for the handling of doxygen configuration and generation used to make this documentation. The <code>AStyle</code> extension add a better formatting of C and C++ files. The three last extension can be found on <code>Tools-&gt;Extension Manager</code> of Atmel Studio.</p>
+<h1><a class="anchor" id="secavr"></a>
+AVR toolchain</h1>
+<p>If you are a true extremist on ArchLinux with a zsh shell and a full configurated neoVim, you maybe don't want of a clickodrome. Hopefully, Arduino IDE, Atmel Studio and al. used in back end open source compiler and CLI utility. The AVR toolchain is a collection of tools and librairies used to create applications for AVR microcontrollers. This collection includes compiler, assembler, linker and Standard C &amp; math libraries. Most of these tools are based on efforts from GNU, and some are developed by Atmel. It can be download from Atmel website for <a href="http://www.atmel.com/tools/atmelavrtoolchainforwindows.aspx">Windows</a> and for <a href="http://www.atmel.com/tools/atmelavrtoolchainforlinux.aspx">Linux</a> (for Atmega328, choose the 8-bit version).</p>
+<h1><a class="anchor" id="secbooton"></a>
+Upload a new bootloader</h1>
+<p>The bootloader is a program allowing the boot and the configuration of the Arduino Uno's microcontroller. IDE presented in previous part gice features in order to flash this bootloader based on <a href="https://savannah.nongnu.org/projects/avrdude">avrdude</a> utility. It can be really usefull to have the best configuration for our application especially for power consumption issues. You can't flash the bootloader as you reprogram the microcontroller. You need to use a third party device named programmer. There are several programmer like <a href="http://www.atmel.com/tools/MATUREAVRISP.aspx">AVR ISP</a>, <a href="https://learn.adafruit.com/usbtinyisp">USBtinyISP</a> or a <a href="http://arduino.cc/en/Hacking/ParallelProgrammer">parallel programmer</a>. You can also use an Arduino board as a programmer in order to flash the bootloader of an other Arduino board. A good tutorial explains how to make <a href="http://arduino.cc/en/Tutorial/ArduinoISP">an ISP programmer with Arduino</a> . </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 4 2014 10:05:38 for Proto2Dev by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 4 2014 10:05:37 for Proto2Dev by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

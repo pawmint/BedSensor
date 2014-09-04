@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>Proto2Dev: Main Page</title>
+<title>Proto2Dev: sProtocolDC1 Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -39,9 +39,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -61,7 +61,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-</div><!-- top -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="classes.html"><span>Data&#160;Structure&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Data&#160;Fields</span></a></li>
+    </ul>
+  </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -76,16 +82,73 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+</div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">Proto2Dev Documentation</div>  </div>
+<div class="title">sProtocolDC1 Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>ceci est un test.<a class="el" href="hardware_configuration.html">Hardware configuration of Bedsensor prototype</a> <a class="el" href="software_architecture.html">Software architecture</a> <a class="el" href="arduino_programmation.html">Arduino Uno programmation</a> <a class="el" href="xbee_configuration.html">Xbee configuration</a> </p>
-</div></div><!-- contents -->
+
+<p>Container for DC1 frame data.  
+ <a href="structs_protocol_d_c1.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="protocol___d_c1_8h_source.html">protocol_DC1.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Data Fields</h2></td></tr>
+<tr class="memitem:ae73654f333e4363463ad8c594eca1905"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structs_protocol_d_c1.html#ae73654f333e4363463ad8c594eca1905">time</a></td></tr>
+<tr class="memdesc:ae73654f333e4363463ad8c594eca1905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time of acquistion from millis().  <a href="#ae73654f333e4363463ad8c594eca1905">More...</a><br/></td></tr>
+<tr class="separator:ae73654f333e4363463ad8c594eca1905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3636f4d6b44d64bbdd15f1288d434d9e"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structs_protocol_d_c1.html#a3636f4d6b44d64bbdd15f1288d434d9e">fscValues</a> [<a class="el" href="protocol_8h.html#a26e5efd4fa5996225c4e7b13df1d68f8">PROTOCOL_FSC_NUMBER</a>]</td></tr>
+<tr class="memdesc:a3636f4d6b44d64bbdd15f1288d434d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">FSC's data samples.  <a href="#a3636f4d6b44d64bbdd15f1288d434d9e">More...</a><br/></td></tr>
+<tr class="separator:a3636f4d6b44d64bbdd15f1288d434d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Container for DC1 frame data. </p>
+
+<p>Definition at line <a class="el" href="protocol___d_c1_8h_source.html#l00023">23</a> of file <a class="el" href="protocol___d_c1_8h_source.html">protocol_DC1.h</a>.</p>
+</div><h2 class="groupheader">Field Documentation</h2>
+<a class="anchor" id="a3636f4d6b44d64bbdd15f1288d434d9e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t fscValues[<a class="el" href="protocol_8h.html#a26e5efd4fa5996225c4e7b13df1d68f8">PROTOCOL_FSC_NUMBER</a>]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>FSC's data samples. </p>
+
+<p>Definition at line <a class="el" href="protocol___d_c1_8h_source.html#l00026">26</a> of file <a class="el" href="protocol___d_c1_8h_source.html">protocol_DC1.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae73654f333e4363463ad8c594eca1905"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t time</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Time of acquistion from millis(). </p>
+
+<p>Definition at line <a class="el" href="protocol___d_c1_8h_source.html#l00025">25</a> of file <a class="el" href="protocol___d_c1_8h_source.html">protocol_DC1.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li><a class="el" href="protocol___d_c1_8h_source.html">protocol_DC1.h</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 4 2014 10:05:38 for Proto2Dev by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 4 2014 10:05:37 for Proto2Dev by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

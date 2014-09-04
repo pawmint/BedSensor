@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['_5f24xx1026_2ecpp',['_24XX1026.cpp',['../__24_x_x1026_8cpp.html',1,'']]],
+  ['_5f24xx1026_2eh',['_24XX1026.h',['../__24_x_x1026_8h.html',1,'']]],
+  ['_5f24xx1026_5fbloc_5fsize',['_24XX1026_BLOC_SIZE',['../__24_x_x1026_8h.html#a93a7b0b20953115bc7073511ccd883c3',1,'_24XX1026.h']]],
+  ['_5f24xx1026_5fhardware_5faddress',['_24XX1026_HARDWARE_ADDRESS',['../__24_x_x1026_8h.html#a18c109a55a43a29cbdb8b65c9ce7189a',1,'_24XX1026.h']]],
+  ['_5f24xx1026_5finit',['_24XX1026_init',['../__24_x_x1026_8h.html#abb535cf9da4a808c10e983ef86fbe231',1,'_24XX1026.h']]],
+  ['_5f24xx1026_5fmemory_5fsize',['_24XX1026_MEMORY_SIZE',['../__24_x_x1026_8h.html#a5a7478edabaa3713c68657d096aae9ae',1,'_24XX1026.h']]],
+  ['_5f24xx1026_5fnb_5fbloc',['_24XX1026_NB_BLOC',['../__24_x_x1026_8h.html#a74ec34f4f7e862322d129eb11950c51e',1,'_24XX1026.h']]],
+  ['_5f24xx1026_5fpage_5fsize',['_24XX1026_PAGE_SIZE',['../__24_x_x1026_8h.html#abf6069280a349a6eb1bdfcf518d3f224',1,'_24XX1026.h']]],
+  ['_5f24xx1026_5freadcurrentaddress',['_24XX1026_readCurrentAddress',['../__24_x_x1026_8cpp.html#a70e89a3eb09e3ae8cc9f301b241458e8',1,'_24XX1026_readCurrentAddress(const uint8_t i2cAddr, const uint8_t block_id, uint8_t *value):&#160;_24XX1026.cpp'],['../__24_x_x1026_8h.html#a70e89a3eb09e3ae8cc9f301b241458e8',1,'_24XX1026_readCurrentAddress(const uint8_t i2cAddr, const uint8_t block_id, uint8_t *value):&#160;_24XX1026.cpp']]],
+  ['_5f24xx1026_5freadrandom',['_24XX1026_readRandom',['../__24_x_x1026_8cpp.html#a0123c157cefae7c8c984b804a712524b',1,'_24XX1026_readRandom(const uint8_t i2cAddr, const uint8_t block_id, uint16_t const *readAddr, uint8_t *value):&#160;_24XX1026.cpp'],['../__24_x_x1026_8h.html#a0123c157cefae7c8c984b804a712524b',1,'_24XX1026_readRandom(const uint8_t i2cAddr, const uint8_t block_id, uint16_t const *readAddr, uint8_t *value):&#160;_24XX1026.cpp']]],
+  ['_5f24xx1026_5freadsequential',['_24XX1026_readSequential',['../__24_x_x1026_8cpp.html#a759df0eb416524cf684c12e3221fd8ad',1,'_24XX1026_readSequential(const uint8_t i2cAddr, const uint8_t block_id, uint16_t const *readAddr, uint8_t *values, const uint16_t nbValue):&#160;_24XX1026.cpp'],['../__24_x_x1026_8h.html#a759df0eb416524cf684c12e3221fd8ad',1,'_24XX1026_readSequential(const uint8_t i2cAddr, const uint8_t block_id, uint16_t const *readAddr, uint8_t *values, const uint16_t nbValue):&#160;_24XX1026.cpp']]],
+  ['_5f24xx1026_5ftwi_5fbuffer_5flength',['_24XX1026_TWI_BUFFER_LENGTH',['../__24_x_x1026_8h.html#a44b7999c833897ba048cd4f971e61784',1,'_24XX1026.h']]],
+  ['_5f24xx1026_5fwritebyte',['_24XX1026_writeByte',['../__24_x_x1026_8cpp.html#ab69ad2010ce9d3f552a6ba45351e2d0b',1,'_24XX1026_writeByte(const uint8_t i2cAddr, const uint8_t block_id, uint16_t writeAddr, const uint8_t data):&#160;_24XX1026.cpp'],['../__24_x_x1026_8h.html#ab69ad2010ce9d3f552a6ba45351e2d0b',1,'_24XX1026_writeByte(const uint8_t i2cAddr, const uint8_t block_id, uint16_t writeAddr, const uint8_t data):&#160;_24XX1026.cpp']]],
+  ['_5f24xx1026_5fwritepage',['_24XX1026_writePage',['../__24_x_x1026_8cpp.html#af5343e73ed7a5462eaaf37e239c116db',1,'_24XX1026_writePage(const uint8_t i2cAddr, const uint8_t block_id, uint16_t writeAddr, uint8_t const *data, const uint16_t nbData):&#160;_24XX1026.cpp'],['../__24_x_x1026_8h.html#af5343e73ed7a5462eaaf37e239c116db',1,'_24XX1026_writePage(const uint8_t i2cAddr, const uint8_t block_id, uint16_t writeAddr, uint8_t const *data, const uint16_t nbData):&#160;_24XX1026.cpp']]],
+  ['_5f24xx1026manager',['_24XX1026Manager',['../class__24_x_x1026_manager.html',1,'_24XX1026Manager'],['../class__24_x_x1026_manager.html#add4b7d55f6ba6b1017a0ef6afe7effb3',1,'_24XX1026Manager::_24XX1026Manager()']]],
+  ['_5f_5favr_5f_5f',['__AVR__',['../_8_proto2_dev_8vsarduino_8h.html#a2c5e50d229c92b7a531ebf48b411457b',1,'.Proto2Dev.vsarduino.h']]],
+  ['_5f_5favr_5fatmega328p_5f_5f',['__AVR_ATmega328P__',['../_8_proto2_dev_8vsarduino_8h.html#a2464d5866ae72bdc91c0e47e15c5c322',1,'__AVR_ATmega328P__():&#160;.Proto2Dev.vsarduino.h'],['../_8_proto2_dev_8vsarduino_8h.html#a058fa817d5031013569f6cdd81e999df',1,'__AVR_ATmega328p__():&#160;.Proto2Dev.vsarduino.h']]],
+  ['_5f_5fcplusplus',['__cplusplus',['../_8_proto2_dev_8vsarduino_8h.html#a1b391bc7ed92f79666c4a5d840aa1edd',1,'.Proto2Dev.vsarduino.h']]],
+  ['_5f_5fcxa_5fpure_5fvirtual',['__cxa_pure_virtual',['../_8_proto2_dev_8vsarduino_8h.html#a6be7d9ce80c86f5178635fa86c2dd5e7',1,'.Proto2Dev.vsarduino.h']]]
+];
